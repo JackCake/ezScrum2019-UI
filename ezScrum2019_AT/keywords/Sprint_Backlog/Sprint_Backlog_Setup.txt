@@ -1,0 +1,67 @@
+*** Settings ***
+Resource          ../Common_Resource.txt
+Resource          ../Global_Define.txt
+
+*** Keywords ***
+Add Backlog Item Setup
+    Import SQL File Into Database    kanban    products
+    Import SQL File Into Database    sprint_service    sprints
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}
+
+Commit Backlog Item Setup
+    Import SQL File Into Database    kanban    product_backlog_items
+    Import SQL File Into Database    backlog_item_importance_service    backlog_item_importances
+    Import SQL File Into Database    sprint_service    sprints
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}
+
+Add Task Setup
+    Import SQL File Into Database    kanban    product_backlog_items
+    Import SQL File Into Database    backlog_item_importance_service    backlog_item_importances
+    Import SQL File Into Database    sprint_service    sprints
+    Import SQL File Into Database    sprint_service    committed_backlog_items
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}
+
+Edit Task Setup
+    Import SQL File Into Database    kanban    product_backlog_items
+    Import SQL File Into Database    backlog_item_importance_service    backlog_item_importances
+    Import SQL File Into Database    sprint_service    sprints
+    Import SQL File Into Database    sprint_service    committed_backlog_items
+    Import SQL File Into Database    task_service    tasks
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}
+
+Delete Task Setup
+    Import SQL File Into Database    kanban    product_backlog_items
+    Import SQL File Into Database    backlog_item_importance_service    backlog_item_importances
+    Import SQL File Into Database    sprint_service    sprints
+    Import SQL File Into Database    sprint_service    committed_backlog_items
+    Import SQL File Into Database    task_service    tasks
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}
+
+Edit Backlog Item Setup
+    Import SQL File Into Database    kanban    product_backlog_items
+    Import SQL File Into Database    backlog_item_importance_service    backlog_item_importances
+    Import SQL File Into Database    sprint_service    sprints
+    Import SQL File Into Database    sprint_service    committed_backlog_items
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}
+
+Delete Backlog Item Setup
+    Import SQL File Into Database    kanban    product_backlog_items
+    Import SQL File Into Database    backlog_item_importance_service    backlog_item_importances
+    Import SQL File Into Database    sprint_service    sprints
+    Import SQL File Into Database    sprint_service    committed_backlog_items
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}
+
+Drop Backlog Item Setup
+    Import SQL File Into Database    kanban    product_backlog_items
+    Import SQL File Into Database    backlog_item_importance_service    backlog_item_importances
+    Import SQL File Into Database    sprint_service    sprints
+    Import SQL File Into Database    sprint_service    committed_backlog_items
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}

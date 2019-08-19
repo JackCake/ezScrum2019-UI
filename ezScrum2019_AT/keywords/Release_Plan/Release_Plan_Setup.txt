@@ -1,0 +1,58 @@
+*** Settings ***
+Resource          ../Common_Resource.txt
+Resource          ../Global_Define.txt
+
+*** Keywords ***
+Add Release Setup
+    Import SQL File Into Database    kanban    products
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}
+
+Edit Release Setup
+    Import SQL File Into Database    kanban    products
+    Import SQL File Into Database    release_service    releases
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}
+
+Delete Release Setup
+    Import SQL File Into Database    kanban    products
+    Import SQL File Into Database    release_service    releases
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}
+
+Schedule Backlog Item Setup
+    Import SQL File Into Database    kanban    product_backlog_items
+    Import SQL File Into Database    backlog_item_importance_service    backlog_item_importances
+    Import SQL File Into Database    release_service    releases
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}
+
+Unschedule Backlog Item Setup
+    Import SQL File Into Database    kanban    product_backlog_items
+    Import SQL File Into Database    backlog_item_importance_service    backlog_item_importances
+    Import SQL File Into Database    release_service    releases
+    Import SQL File Into Database    release_service    scheduled_backlog_items
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}
+
+Add Backlog Item Setup
+    Import SQL File Into Database    kanban    products
+    Import SQL File Into Database    release_service    releases
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}
+
+Edit Backlog Item Setup
+    Import SQL File Into Database    kanban    product_backlog_items
+    Import SQL File Into Database    backlog_item_importance_service    backlog_item_importances
+    Import SQL File Into Database    release_service    releases
+    Import SQL File Into Database    release_service    scheduled_backlog_items
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}
+
+Delete Backlog Item Setup
+    Import SQL File Into Database    kanban    product_backlog_items
+    Import SQL File Into Database    backlog_item_importance_service    backlog_item_importances
+    Import SQL File Into Database    release_service    releases
+    Import SQL File Into Database    release_service    scheduled_backlog_items
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}

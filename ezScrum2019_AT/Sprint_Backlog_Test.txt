@@ -1,0 +1,97 @@
+*** Settings ***
+Library           keywords/lib/Selenium2Improved.py
+Resource          keywords/Common_Resource.txt
+Resource          keywords/Sprint_Backlog/Sprint_Backlog_Setup.txt
+Resource          keywords/Sprint_Backlog/Sprint_Backlog_Keywords.txt
+
+*** Variables ***
+${backlog_item_description1}    As a user, I want to add the backlog item in the product backlog.
+${backlog_item_description2}    As a user, I want to commit the backlog item in the sprint backlog.
+
+*** Test Cases ***
+Add Backlog Item Test
+    [Setup]    Add Backlog Item Setup
+    Select Page    Sprint Backlog
+    ${estimate}    Set Variable    3
+    ${importance}    Set Variable    100
+    Add Backlog Item    ${backlog_item_description1}    ${estimate}    ${importance}
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //table[@class="StoryCard_Table"]//td[text()="${backlog_item_description1}"]
+    [Teardown]    Exit ezScrum2019
+
+Commit Backlog Item Test
+    [Setup]    Commit Backlog Item Setup
+    Select Page    Sprint Backlog
+    Commit Backlog Item    ${backlog_item_description2}
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //table[@class="StoryCard_Table"]//td[text()="${backlog_item_description2}"]
+    [Teardown]    Exit ezScrum2019
+
+Edit Backlog Item Test
+    [Setup]    Edit Backlog Item Setup
+    Select Page    Sprint Backlog
+    ${new_backlog_item_description1}    Set Variable    As a user, I want to edit the backlog item in the product backlog.
+    ${estimate}    Set Variable    2
+    ${importance}    Set Variable    80
+    Edit Story Card    ${backlog_item_description1}    ${new_backlog_item_description1}    ${estimate}    ${importance}
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //table[@class="StoryCard_Table"]//td[text()="${new_backlog_item_description1}"]
+    [Teardown]    Exit ezScrum2019
+
+Delete Backlog Item Test
+    [Setup]    Delete Backlog Item Setup
+    Select Page    Sprint Backlog
+    Delete Story Card    ${backlog_item_description1}
+    Wait Until Keyword Succeeds    30s    3s    Page Should Not Contain Element    //table[@class="StoryCard_Table"]//td[text()="${backlog_item_description1}"]
+    Select Page    Product Backlog
+    Wait Until Keyword Succeeds    30s    3s    Page Should Not Contain Element    //td[text()="${backlog_item_description1}"]
+    [Teardown]    Exit ezScrum2019
+
+Dop Backlog Item Test
+    [Setup]    Drop Backlog Item Setup
+    Select Page    Sprint Backlog
+    Drop Story Card    ${backlog_item_description2}
+    Wait Until Keyword Succeeds    30s    3s    Page Should Not Contain Element    //table[@class="StoryCard_Table"]//td[text()="${backlog_item_description2}"]
+    Select Page    Product Backlog
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //td[text()="${backlog_item_description2}"]
+    [Teardown]    Exit ezScrum2019
+
+Add Task Test
+    [Setup]    Add Task Setup
+    Select Page    Sprint Backlog
+    ${task_description1}    Set Variable    Use Case
+    ${estimate1}    Set Variable    5
+    Add Task Card    ${task_description1}    ${estimate1}    ${backlog_item_description1}
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //table[@class="TaskCard_Table"]//td[text()="${task_description1}"]
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //table[@class="TaskCard_Table"]//td[text()="${estimate1}"]
+    ${task_description2}    Set Variable    Unit Test
+    ${estimate2}    Set Variable    3
+    Add Task Card    ${task_description2}    ${estimate2}    ${backlog_item_description1}
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //table[@class="TaskCard_Table"]//td[text()="${task_description2}"]
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //table[@class="TaskCard_Table"]//td[text()="${estimate2}"]
+    [Teardown]    Exit ezScrum2019
+
+Edit Task Test
+    [Setup]    Edit Task Setup
+    Select Page    Sprint Backlog
+    ${original_task_description1}    Set Variable    Use Case
+    ${new_task_description1}    Set Variable    Implement Use Case
+    ${estimate1}    Set Variable    8
+    Edit Task Card    ${original_task_description1}    ${new_task_description1}    ${estimate1}
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //table[@class="TaskCard_Table"]//td[text()="${new_task_description1}"]
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //table[@class="TaskCard_Table"]//td[text()="${estimate1}"]
+    ${original_task_description2}    Set Variable    Unit Test
+    ${new_task_description2}    Set Variable    Implement Unit Test
+    ${estimate2}    Set Variable    5
+    Edit Task Card    ${original_task_description2}    ${new_task_description2}    ${estimate2}
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //table[@class="TaskCard_Table"]//td[text()="${new_task_description2}"]
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //table[@class="TaskCard_Table"]//td[text()="${estimate2}"]
+    [Teardown]    Exit ezScrum2019
+
+Delete Task Test
+    [Setup]    Delete Task Setup
+    Select Page    Sprint Backlog
+    ${task_description1}    Set Variable    Use Case
+    Delete Task Card    ${task_description1}
+    Wait Until Keyword Succeeds    30s    3s    Page Should Not Contain Element    //table[@class="TaskCard_Table"]//td[text()="${task_description1}"]
+    ${task_description2}    Set Variable    Unit Test
+    Delete Task Card    ${task_description2}
+    Wait Until Keyword Succeeds    30s    3s    Page Should Not Contain Element    //table[@class="TaskCard_Table"]//td[text()="${task_description2}"]
+    [Teardown]    Exit ezScrum2019

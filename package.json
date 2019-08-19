@@ -1,0 +1,33 @@
+{
+  "name": "ezscrum",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.18.0",
+    "chart.js": "^2.8.0",
+    "grid-draggable": "^3.2.2",
+    "moment": "^2.22.1",
+    "react": "^16.4.0",
+    "react-bootstrap": "^0.32.1",
+    "react-bootstrap-table": "^4.3.1",
+    "react-datepicker": "^1.5.0",
+    "react-dom": "^16.3.2",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "^2.1.3",
+    "react-select": "^2.0.0",
+    "react-table": "^6.8.2",
+    "simple-flexbox": "^1.2.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

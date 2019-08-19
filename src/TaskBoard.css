@@ -1,0 +1,115 @@
+.TaskBoard_Todo_Header{
+    border: 1px solid #222222;
+    font-weight: bolder;
+    background-color: #FF6347;
+    text-align: center;
+}
+
+.TaskBoard_Doing_Header{
+    border: 1px solid #222222;
+    font-weight: bolder;
+    background-color: #B1FF3E;
+    text-align: center;
+}
+
+.TaskBoard_Done_Header{
+    border: 1px solid #222222;
+    font-weight: bolder;
+    background-color: #FDFF55;
+    text-align: center;
+}
+
+.StoryCard_Header{
+    background-color: #EFA2A1;
+    border: solid 1px black;
+    padding: 5px;
+    height: 10px;
+    width: 100%;
+}
+
+.StoryCard_Table{
+    margin-top: 5px;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 5px;
+    border: solid 3px #191919;
+    width: 90%;
+    padding: 1px;
+    border-spacing: 1px;
+    border-collapse: separate;
+    word-break: break-all;
+}
+
+.StoryCard_Description{
+    vertical-align: top;
+    padding: 10px;
+    width: auto;
+    word-wrap: break-word;
+    white-space: normal;
+    word-break: keep-all;
+    -webkit-hyphens: auto;
+    hyphens: manual;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    display: inline-block;
+}
+
+.StoryCard_Value{
+    vertical-align: top;
+    padding: 10px;
+    font-family: impact;
+    width: 25%;
+    vertical-align: right;
+}
+
+.TaskCard_Header{
+    background-color: #BFBFFF;
+    border: solid 1px black;
+    padding: 5px;
+    height: 10px;
+    width: 100%;
+}
+
+.TaskCard_Table{
+    margin-top: 5px;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 5px;
+    border: solid 3px #191919;
+    width: 90%;
+    padding: 1px;
+    border-spacing: 1px;
+    border-collapse: separate;
+    word-break: break-all;
+}
+
+.TaskCard_Description{
+    vertical-align: top;
+    padding: 10px;
+    width: auto;
+    word-wrap: break-word;
+    white-space: normal;
+    word-break: keep-all;
+    -webkit-hyphens: auto;
+    hyphens: manual;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+}
+
+.TaskCard_Value{
+    vertical-align: top;
+    padding: 10px;
+    font-size: 100%;
+    font-family: impact;
+    width: 50px;
+    vertical-align: right;
+}
+
+.Row_Bottom{
+    border-bottom:1.5pt solid rgb(17, 122, 141);
+}
+
+.Card_Button{
+    display: flex;
+    float: right;
+}

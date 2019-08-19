@@ -1,0 +1,68 @@
+*** Settings ***
+Resource          Global_Define.txt
+Library           lib/DatabaseHandler.py
+Library           lib/Selenium2Improved.py
+
+*** Keywords ***
+Import SQL File Into Database
+    [Arguments]    ${database_name}    ${file_name}
+    ${SQLFilePath}=    Catenate    SEPARATOR=\\    ${EXECDIR}    TestData    ${file_name}.sql
+    Load Database    ${database_url}    ${database_name}    ${database_account}    ${database_password}    ${SQLFilePath}
+
+Turn On ezScrum2019
+    Open Browser    ${url}    ${browser}
+    Maximize Browser Window
+    Set Selenium Speed    ${selenium_speed}
+
+Exit ezScrum2019
+    Clean Data In Database
+    Close Browser
+
+Clean Data In Database
+    : FOR    ${database_name}    IN    @{database_names}
+    \    Log    ${database_name}
+    \    Clean Database    ${database_url}    ${database_account}    ${database_password}    ${database_name}
+
+Select Page
+    [Arguments]    ${page_name}
+    ${selected_page}    Set Variable    //a[text()="${page_name}"]
+    Wait Until Element Is Visible    ${selected_page}    30s
+    Click Element    ${selected_page}
+
+Add Backlog Item
+    [Arguments]    ${description}    ${estimate}    ${importance}
+    ${add_backlog_item_button}    Set Variable    //button[text()="Add Backlog Item"]
+    Wait Until Element Is Visible    ${add_backlog_item_button}    30s
+    Click Button    ${add_backlog_item_button}
+    Input Text    //label[text()="*Description:"]/..//textarea    ${description}
+    Input Text    //label[text()="Estimate:"]/..//input    ${estimate}
+    Input Text    //label[text()="Importance:"]/..//input    ${importance}
+    Click Button    //button[text()="Submit"]
+
+Edit Backlog Item
+    [Arguments]    ${original_description}    ${new_description}    ${estimate}    ${importance}
+    Select Data In Table    ${original_description}
+    Click Button    //button[text()="Edit Backlog Item"]
+    Input Text    //label[text()="*Description:"]/..//textarea    ${new_description}
+    Input Text    //label[text()="Estimate:"]/..//input    ${estimate}
+    Input Text    //label[text()="Importance:"]/..//input    ${importance}
+    Click Button    //button[text()="Submit"]
+
+Delete Backlog Item
+    [Arguments]    ${description}
+    Select Data In Table    ${description}
+    Click Button    //button[text()="Delete Backlog Item"]
+    Click Button    //button[text()="Submit"]
+
+Select Data In Table
+    [Arguments]    ${data}
+    ${selected_data}    Set Variable    //td[text()="${data}"]
+    Wait Until Element Is Visible    ${selected_data}    30s
+    Click Element    ${selected_data}
+
+Go Into Product
+    [Arguments]    ${product_name}
+    ${added_product}    Set Variable    //td[text()="${product_name}"]
+    Wait Until Element Is Visible    ${added_product}    30s
+    Click Element    ${added_product}
+    Click Button    //button[text()="Go Into Product"]

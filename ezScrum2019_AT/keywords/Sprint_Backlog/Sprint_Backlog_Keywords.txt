@@ -1,0 +1,62 @@
+*** Settings ***
+Resource          ../Common_Resource.txt
+Library           ../lib/Selenium2Improved.py
+
+*** Keywords ***
+Commit Backlog Item
+    [Arguments]    ${description}
+    ${commit_backlog_item_button}    Set Variable    //button[text()="Commit Backlog Item"]
+    Wait Until Element Is Visible    ${commit_backlog_item_button}    30s
+    Click Button    ${commit_backlog_item_button}
+    Select Data In Table    ${description}
+    Click Button    //button[text()="Submit"]
+    Wait Until Keyword Succeeds    30s    5s    Page Should Contain Element    //td[text()="${description}"]
+
+Drop Story Card
+    [Arguments]    ${description}
+    ${drop_backlog_item_img}    Set Variable    //table[@class="StoryCard_Table"]//td[text()="${description}"]/../..//img[@alt="Drop Backlog Item"]
+    Wait Until Element Is Visible    ${drop_backlog_item_img}    30s
+    Click Element    ${drop_backlog_item_img}
+    Click Button    //button[text()="Submit"]
+
+Add Task Card
+    [Arguments]    ${description}    ${estimate}    ${backlog_item_description}
+    ${add_task_img}    Set Variable    //td[text()="${backlog_item_description}"]/../..//img[@alt="Add Task"]
+    Wait Until Element Is Visible    ${add_task_img}    30s
+    Click Element    ${add_task_img}
+    Input Text    //label[text()="*Description:"]/..//textarea    ${description}
+    Input Text    //label[text()="Estimate:"]/..//input    ${estimate}
+    Click Button    //button[text()="Submit"]
+
+Edit Task Card
+    [Arguments]    ${original_description}    ${new_description}    ${estimate}
+    ${edit_task_img}    Set Variable    //td[text()="${original_description}"]/../..//img[@alt="Edit Task"]
+    Wait Until Element Is Visible    ${edit_task_img}    30s
+    Click Element    ${edit_task_img}
+    Input Text    //label[text()="*Description:"]/..//textarea    ${new_description}
+    Input Text    //label[text()="Estimate:"]/..//input    ${estimate}
+    Click Button    //button[text()="Submit"]
+
+Delete Task Card
+    [Arguments]    ${description}
+    ${delete_task_img}    Set Variable    //td[text()="${description}"]/../..//img[@alt="Delete Task"]
+    Wait Until Element Is Visible    ${delete_task_img}    30s
+    Click Element    ${delete_task_img}
+    Click Button    //button[text()="Submit"]
+
+Edit Story Card
+    [Arguments]    ${original_description}    ${new_description}    ${estimate}    ${importance}
+    ${edit_backlog_item_img}    Set Variable    //td[text()="${original_description}"]/../..//img[@alt="Edit Backlog Item"]
+    Wait Until Element Is Visible    ${edit_backlog_item_img}    30s
+    Click Element    ${edit_backlog_item_img}
+    Input Text    //label[text()="*Description:"]/..//textarea    ${new_description}
+    Input Text    //label[text()="Estimate:"]/..//input    ${estimate}
+    Input Text    //label[text()="Importance:"]/..//input    ${importance}
+    Click Button    //button[text()="Submit"]
+
+Delete Story Card
+    [Arguments]    ${description}
+    ${delete_backlog_item_img}    Set Variable    //td[text()="${description}"]/../..//img[@alt="Delete Backlog Item"]
+    Wait Until Element Is Visible    ${delete_backlog_item_img}    30s
+    Click Element    ${delete_backlog_item_img}
+    Click Button    //button[text()="Submit"]

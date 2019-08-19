@@ -1,0 +1,10 @@
+*** Settings ***
+Resource          ../Common_Resource.txt
+Resource          ../Global_Define.txt
+
+*** Keywords ***
+Edit Retrospective Setup
+    Import SQL File Into Database    kanban    products
+    Import SQL File Into Database    sprint_service    sprints
+    Turn On ezScrum2019
+    Go Into Product    ${product_name}

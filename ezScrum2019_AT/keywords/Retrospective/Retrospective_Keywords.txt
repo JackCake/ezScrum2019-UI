@@ -1,0 +1,14 @@
+*** Settings ***
+Library           ../lib/Selenium2Improved.py
+Resource          ../Common_Resource.txt
+
+*** Keywords ***
+Edit Retrospective
+    [Arguments]    ${retrospective}    ${sprint_order_id}
+    ${selected_retrospective}    Set Variable    //td[text()="${sprint_order_id}"]
+    Wait Until Element Is Visible    ${selected_retrospective}    30s
+    Click Element    ${selected_retrospective}
+    ${edit_retrosepctive_button}    Set Variable    //button[text()="Edit Retrospective"]
+    Click Button    ${edit_retrosepctive_button}
+    Input Text    //label[text()="*Discussion:"]/..//textarea    ${retrospective}
+    Click Button    //button[text()="Submit"]

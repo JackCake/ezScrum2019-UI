@@ -1,0 +1,35 @@
+*** Settings ***
+Library           keywords/lib/Selenium2Improved.py
+Resource          keywords/Common_Resource.txt
+Resource          keywords/Sprint_Plan/Sprint_Plan_Setup.txt
+Resource          keywords/Sprint_Plan/Sprint_Plan_Keywords.txt
+
+*** Test Cases ***
+Add Sprint Test
+    [Setup]    Add Sprint Setup
+    Select Page    Sprint Plan
+    ${goal}    Set Variable    Implement the product backlog and sprint backlog.
+    ${interval}    Set Variable    2
+    Add Sprint    ${goal}    ${interval}
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //td[text()="${goal}"]
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //td[text()="${interval}"]
+    [Teardown]    Exit ezScrum2019
+
+Edit Sprint Test
+    [Setup]    Edit Sprint Setup
+    Select Page    Sprint Plan
+    ${original_goal}    Set Variable    Implement the product backlog and sprint backlog.
+    ${new_goal}    Set Variable    Implement the product backlog.
+    ${interval}    Set Variable    1
+    Edit Sprint    ${original_goal}    ${new_goal}    ${interval}
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //td[text()="${new_goal}"]
+    Wait Until Keyword Succeeds    30s    3s    Page Should Contain Element    //td[text()="${interval}"]
+    [Teardown]    Exit ezScrum2019
+
+Delete Sprint Test
+    [Setup]    Delete Sprint Setup
+    Select Page    Sprint Plan
+    ${goal}    Set Variable    Implement the product backlog and sprint backlog.
+    Delete Sprint    ${goal}
+    Wait Until Keyword Succeeds    30s    3s    Page Should Not Contain Element    //td[text()="${goal}"]
+    [Teardown]    Exit ezScrum2019
