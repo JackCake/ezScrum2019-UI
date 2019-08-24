@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 
+import SideBar from '../SideBar.js';
+
 import ViewRetrospective from './ViewRetrospective.js';
 import EditRetrospective from './EditRetrospective.js';
 
@@ -19,11 +21,11 @@ class Retrospective extends React.Component {
   }
 
   getAllRetrospective(){
-    if(this.props.selectedProduct === undefined){
+    if(this.props.location.state === undefined){
       return <Redirect to={"/"}/>
     }
     let self =this;
-    axios.get('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/retrospectives')
+    axios.get('http://localhost:8080/ezScrum/products/' + this.props.location.state.selectedProduct.productId + '/retrospectives')
     .then(function (response) {
         let retrospectiveList = response.data.retrospectiveList;
         for(var i=0; i<retrospectiveList.length; i++){
@@ -58,12 +60,22 @@ class Retrospective extends React.Component {
   }
 
   render() {
+    if(this.props.location.state === undefined){
+      return <Redirect to={"/"}/>
+    }
     return (
-      <div>
-        <div style = {{display: 'flex'}}>
-          <EditRetrospective getAllRetrospective={this.getAllRetrospective} selectedRetrospective={this.state.selectedRetrospective} selectedProduct={this.props.selectedProduct}/>
+      <div className="SideBar_Div_All">
+        <div className="SideBar_Div">
+          <SideBar selectedProduct={this.props.location.state.selectedProduct}/>
         </div>
-        <ViewRetrospective retrospectiveData={this.state.retrospectiveData} handleRowSelect={this.handleRowSelect}/>
+        <div className="SideBar_Div_Main">
+          <div>
+            <div style = {{display: 'flex'}}>
+              <EditRetrospective getAllRetrospective={this.getAllRetrospective} selectedRetrospective={this.state.selectedRetrospective} selectedProduct={this.props.location.state.selectedProduct}/>
+            </div>
+            <ViewRetrospective retrospectiveData={this.state.retrospectiveData} handleRowSelect={this.handleRowSelect}/>
+          </div>
+        </div>
       </div>
     );
   }

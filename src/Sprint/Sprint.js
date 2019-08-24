@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import SideBar from '../SideBar.js';
 import AddSprint from './AddSprint.js';
 import ViewSprint from './ViewSprint.js';
 import EditSprint from './EditSprint.js';
@@ -19,11 +20,11 @@ class Sprint extends React.Component {
   }
 
   getAllSprint(){
-    if(this.props.selectedProduct === undefined){
+    if(this.props.location.state === undefined){
       return <Redirect to={"/"}/>
     }
     let self =this;
-    axios.get('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/sprints')
+    axios.get('http://localhost:8080/ezScrum/products/' + this.props.location.state.selectedProduct.productId + '/sprints')
     .then(function (response) {
         let sprintList = response.data.sprintList;
         let selectedSprint = self.state.selectedSprint;
@@ -53,14 +54,24 @@ class Sprint extends React.Component {
   }
 
   render() {
+    if(this.props.location.state === undefined){
+      return <Redirect to={"/"}/>
+    }
     return (
-      <div>
-        <div style = {{display : 'flex'}}>
-          <AddSprint getAllSprint={this.getAllSprint} selectedProduct={this.props.selectedProduct}/>
-          <EditSprint getAllSprint={this.getAllSprint} selectedSprint={this.state.selectedSprint} selectedProduct={this.props.selectedProduct}/>
-          <DeleteSprint getAllSprint={this.getAllSprint} selectedSprint={this.state.selectedSprint} selectedProduct={this.props.selectedProduct}/>
+      <div className="SideBar_Div_All">
+        <div className="SideBar_Div">
+          <SideBar selectedProduct={this.props.location.state.selectedProduct}/>
         </div>
-        <ViewSprint sprintData={this.state.sprintData} handleRowSelect={this.handleRowSelect}/>
+        <div className="SideBar_Div_Main">
+        <div>
+          <div style = {{display : 'flex'}}>
+            <AddSprint getAllSprint={this.getAllSprint} selectedProduct={this.props.location.state.selectedProduct}/>
+            <EditSprint getAllSprint={this.getAllSprint} selectedSprint={this.state.selectedSprint} selectedProduct={this.props.location.state.selectedProduct}/>
+            <DeleteSprint getAllSprint={this.getAllSprint} selectedSprint={this.state.selectedSprint} selectedProduct={this.props.location.state.selectedProduct}/>
+          </div>
+          <ViewSprint sprintData={this.state.sprintData} handleRowSelect={this.handleRowSelect}/>
+          </div>
+        </div>
       </div>
     );
   }

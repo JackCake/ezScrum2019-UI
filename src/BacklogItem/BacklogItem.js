@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import SideBar from '../SideBar.js';
 import AddBacklogItem from './AddBacklogItem.js';
 import EditBacklogItem from './EditBacklogItem.js';
 import ViewBacklogItem from './ViewBacklogItem.js';
@@ -19,11 +20,11 @@ class BacklogItem extends React.Component {
   }
 
   getAllBacklogItem(){
-    if(this.props.selectedProduct === undefined){
+    if(this.props.location.state === undefined){
       return <Redirect to={"/"}/>
     }
     let self =this;
-    axios.get('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/backlog_items')
+    axios.get('http://localhost:8080/ezScrum/products/' + this.props.location.state.selectedProduct.productId + '/backlog_items')
     .then(function (response) {
       let backlogItemList = response.data.backlogItemList;
       for(var i=0; i<backlogItemList.length; i++){
@@ -61,14 +62,24 @@ class BacklogItem extends React.Component {
   }
 
   render() {
+    if(this.props.location.state === undefined){
+      return <Redirect to={"/"}/>
+    }
     return (
-      <div>
-        <div style = {{display : 'flex'}}>
-          <AddBacklogItem getAllBacklogItem={this.getAllBacklogItem} selectedProduct={this.props.selectedProduct}/>
-          <EditBacklogItem getAllBacklogItem={this.getAllBacklogItem} selectedBacklogItem={this.state.selectedBacklogItem} selectedProduct={this.props.selectedProduct}/>
-          <DeleteBacklogItem getAllBacklogItem={this.getAllBacklogItem} selectedBacklogItem={this.state.selectedBacklogItem} selectedProduct={this.props.selectedProduct}/>
+      <div className="SideBar_Div_All">
+        <div className="SideBar_Div">
+          <SideBar selectedProduct={this.props.location.state.selectedProduct}/>
         </div>
-        <ViewBacklogItem backlogItemData={this.state.backlogItemData} handleRowSelect={this.handleRowSelect}/>
+        <div className="SideBar_Div_Main">
+          <div>
+            <div style = {{display : 'flex'}}>
+              <AddBacklogItem getAllBacklogItem={this.getAllBacklogItem} selectedProduct={this.props.location.state.selectedProduct}/>
+              <EditBacklogItem getAllBacklogItem={this.getAllBacklogItem} selectedBacklogItem={this.state.selectedBacklogItem} selectedProduct={this.props.location.state.selectedProduct}/>
+              <DeleteBacklogItem getAllBacklogItem={this.getAllBacklogItem} selectedBacklogItem={this.state.selectedBacklogItem} selectedProduct={this.props.location.state.selectedProduct}/>
+            </div>
+            <ViewBacklogItem backlogItemData={this.state.backlogItemData} handleRowSelect={this.handleRowSelect}/>
+          </div>
+        </div>
       </div>
     );
   }

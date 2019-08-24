@@ -56,7 +56,7 @@ class Product extends React.Component {
     if(this.state.selectedProduct){
       let data = {selectedProduct: this.state.selectedProduct};
       let path = {
-        pathname: '/ViewProduct', 
+        pathname: '/ProductBacklog', 
         state: data
       }
       this.props.history.push(path);

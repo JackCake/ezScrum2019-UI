@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Select from 'react-select';
+import SideBar from '../SideBar.js';
 import AddBacklogItem from './AddBacklogItem.js';
 import CommitBacklogItem from './CommitBacklogItem.js';
 import StoryBurndownChart from './StoryBurndownChart.js';
@@ -36,12 +37,12 @@ class SprintBacklog extends React.Component {
   }
 
   getAllSprintList(){
-    if(this.props.selectedProduct === undefined){
+    if(this.props.location.state === undefined){
       return <Redirect to={"/"}/>
     }
     let self =this;
     let options = [];
-    axios.get('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/sprints')
+    axios.get('http://localhost:8080/ezScrum/products/' + this.props.location.state.selectedProduct.productId + '/sprints')
     .then(function (response) {
         let sprintList = response.data.sprintList;
         sprintList.forEach(element => {
@@ -69,7 +70,7 @@ class SprintBacklog extends React.Component {
 
   getStoryBurndownChart(selectedSprintId){
     let self =this;
-    axios.get('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/sprints/' + selectedSprintId + '/backlog_item_burndown_chart')
+    axios.get('http://localhost:8080/ezScrum/products/' + this.props.location.state.selectedProduct.productId + '/sprints/' + selectedSprintId + '/backlog_item_burndown_chart')
     .then(function (response) {
         let realPoints = response.data.realPoints;
         let idealPoints = response.data.idealPoints;
@@ -87,7 +88,7 @@ class SprintBacklog extends React.Component {
 
   getTaskBurndownChart(selectedSprintId){
     let self =this;
-    axios.get('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/sprints/' + selectedSprintId + '/task_burndown_chart')
+    axios.get('http://localhost:8080/ezScrum/products/' + this.props.location.state.selectedProduct.productId + '/sprints/' + selectedSprintId + '/task_burndown_chart')
     .then(function (response) {
         let realPoints = response.data.realPoints;
         let idealPoints = response.data.idealPoints;
@@ -105,7 +106,7 @@ class SprintBacklog extends React.Component {
 
   getAllCommittedBacklogItem(selectedSprintId){
     let self = this;
-    axios.get('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/sprints/' + selectedSprintId + '/committed_backlog_items')
+    axios.get('http://localhost:8080/ezScrum/products/' + this.props.location.state.selectedProduct.productId + '/sprints/' + selectedSprintId + '/committed_backlog_items')
     .then(function (response) {
         self.setState({taskData : []})
         let committedBacklogItemList = response.data.committedBacklogItemList;
@@ -150,19 +151,29 @@ class SprintBacklog extends React.Component {
   }
 
   render() {
+    if(this.props.location.state === undefined){
+      return <Redirect to={"/"}/>
+    }
     return (
-      <div>
-        <div style = {{display : 'flex'}}>
-          <AddBacklogItem getAllCommittedBacklogItem={this.getAllCommittedBacklogItem} selectedSprintId={this.state.selectedSprintId} selectedProduct={this.props.selectedProduct} disabled={this.state.isSprintOverdue}/>
-          <CommitBacklogItem getAllCommittedBacklogItem={this.getAllCommittedBacklogItem} selectedSprintId={this.state.selectedSprintId} selectedProduct={this.props.selectedProduct} disabled={this.state.isSprintOverdue}/>
+      <div className="SideBar_Div_All">
+        <div className="SideBar_Div">
+          <SideBar selectedProduct={this.props.location.state.selectedProduct}/>
         </div>
-        <Select name="form-field-name" value={this.state.selectedSprintOption} onChange={this.selectSprintOnChange.bind(this)} options={this.state.sprintOptions} isClearable={false}/>
-        <div style = {{display : 'flex'}}>
-          <StoryBurndownChart storyRealPoints={this.state.storyRealPoints} storyIdealPoints={this.state.storyIdealPoints} storySprintDates={this.state.storySprintDates}/>
-          <TaskBurndownChart taskRealPoints={this.state.taskRealPoints} taskIdealPoints={this.state.taskIdealPoints} taskSprintDates={this.state.taskSprintDates}/>
+        <div className="SideBar_Div_Main">
+          <div>
+            <div style = {{display : 'flex'}}>
+              <AddBacklogItem getAllCommittedBacklogItem={this.getAllCommittedBacklogItem} selectedSprintId={this.state.selectedSprintId} selectedProduct={this.props.location.state.selectedProduct} disabled={this.state.isSprintOverdue}/>
+              <CommitBacklogItem getAllCommittedBacklogItem={this.getAllCommittedBacklogItem} selectedSprintId={this.state.selectedSprintId} selectedProduct={this.props.location.state.selectedProduct} disabled={this.state.isSprintOverdue}/>
+            </div>
+            <Select name="form-field-name" value={this.state.selectedSprintOption} onChange={this.selectSprintOnChange.bind(this)} options={this.state.sprintOptions} isClearable={false}/>
+            <div style = {{display : 'flex'}}>
+              <StoryBurndownChart storyRealPoints={this.state.storyRealPoints} storyIdealPoints={this.state.storyIdealPoints} storySprintDates={this.state.storySprintDates}/>
+              <TaskBurndownChart taskRealPoints={this.state.taskRealPoints} taskIdealPoints={this.state.taskIdealPoints} taskSprintDates={this.state.taskSprintDates}/>
+            </div>
+            <ViewCommittedBacklogItem storyData={this.state.storyData} taskData={this.state.taskData} 
+            getAllCommittedBacklogItem={this.getAllCommittedBacklogItem} selectedSprintId={this.state.selectedSprintId} selectedProduct={this.props.location.state.selectedProduct} isSprintOverdue={this.state.isSprintOverdue}/>
+          </div>
         </div>
-        <ViewCommittedBacklogItem storyData={this.state.storyData} taskData={this.state.taskData} 
-        getAllCommittedBacklogItem={this.getAllCommittedBacklogItem} selectedSprintId={this.state.selectedSprintId} selectedProduct={this.props.selectedProduct} isSprintOverdue={this.state.isSprintOverdue}/>
       </div>
     );
   }
