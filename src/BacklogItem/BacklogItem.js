@@ -6,6 +6,7 @@ import EditBacklogItem from './EditBacklogItem.js';
 import ViewBacklogItem from './ViewBacklogItem.js';
 import DeleteBacklogItem from './DeleteBacklogItem.js';
 import { Redirect } from 'react-router-dom';
+import PrintSelectedBacklogItem from './PrintSelectedBacklogItem.js';
 
 class BacklogItem extends React.Component {
   constructor(props){
@@ -76,6 +77,7 @@ class BacklogItem extends React.Component {
               <AddBacklogItem getAllBacklogItem={this.getAllBacklogItem} selectedProduct={this.props.location.state.selectedProduct}/>
               <EditBacklogItem getAllBacklogItem={this.getAllBacklogItem} selectedBacklogItem={this.state.selectedBacklogItem} selectedProduct={this.props.location.state.selectedProduct}/>
               <DeleteBacklogItem getAllBacklogItem={this.getAllBacklogItem} selectedBacklogItem={this.state.selectedBacklogItem} selectedProduct={this.props.location.state.selectedProduct}/>
+              <PrintSelectedBacklogItem selectedBacklogItem={this.state.selectedBacklogItem} selectedProduct={this.props.location.state.selectedProduct}/>
             </div>
             <ViewBacklogItem backlogItemData={this.state.backlogItemData} handleRowSelect={this.handleRowSelect}/>
           </div>
