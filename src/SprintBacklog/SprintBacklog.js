@@ -6,6 +6,7 @@ import AddBacklogItem from './AddBacklogItem.js';
 import CommitBacklogItem from './CommitBacklogItem.js';
 import PrintCommittedBacklogItem from './PrintCommittedBacklogItem.js';
 import PrintTask from './PrintTask.js';
+import ShowSprintInformation from './ShowSprintInformation.js';
 import StoryBurndownChart from './StoryBurndownChart.js';
 import TaskBurndownChart from './TaskBurndownChart.js';
 import ViewCommittedBacklogItem from './ViewCommittedBacklogItem.js';
@@ -168,6 +169,7 @@ class SprintBacklog extends React.Component {
               <CommitBacklogItem getAllCommittedBacklogItem={this.getAllCommittedBacklogItem} selectedSprintId={this.state.selectedSprintId} selectedProduct={this.props.location.state.selectedProduct} disabled={this.state.isSprintOverdue}/>
               <PrintCommittedBacklogItem selectedSprintId={this.state.selectedSprintId} selectedProduct={this.props.location.state.selectedProduct}/>
               <PrintTask selectedSprintId={this.state.selectedSprintId} selectedProduct={this.props.location.state.selectedProduct}/>
+              <ShowSprintInformation selectedSprintId={this.state.selectedSprintId} selectedProduct={this.props.location.state.selectedProduct}/>
             </div>
             <Select name="form-field-name" value={this.state.selectedSprintOption} onChange={this.selectSprintOnChange.bind(this)} options={this.state.sprintOptions} isClearable={false}/>
             <div style = {{display : 'flex'}}>

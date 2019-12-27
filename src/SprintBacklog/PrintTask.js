@@ -6,10 +6,10 @@ class PrintTask extends React.Component{
     constructor(props){
         super(props);
 
-        this.submitTask = this.submitTask.bind(this);
+        this.submit = this.submit.bind(this);
     }
 
-    submitTask(){
+    submit(){
         axios('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/sprints/' + this.props.selectedSprintId + '/printable_tasks/pdf', {
             method: 'GET',
             responseType: 'blob'
@@ -31,7 +31,7 @@ class PrintTask extends React.Component{
     render(){
         return (
             <div>
-                <Button className="Function_Button" bsStyle="link" bsSize="small" onClick={this.submitTask}>
+                <Button className="Function_Button" bsStyle="link" bsSize="small" onClick={this.submit}>
                     <img src="../delete.png" alt="Print Tasks"/>Print Tasks
                 </Button>
             </div>

@@ -6,10 +6,13 @@ class PrintSelectedBacklogItem extends React.Component{
     constructor(props){
         super(props);
 
-        this.submitBacklogItem = this.submitBacklogItem.bind(this);
+        this.submit = this.submit.bind(this);
     }
 
-    submitBacklogItem(){
+    submit(){
+        if(this.props.selectedBacklogItem === undefined){
+            return;
+        }
         axios('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/printable_backlog_items/' + this.props.selectedBacklogItem.backlogItemId + '/pdf', {
             method: 'GET',
             responseType: 'blob'
@@ -31,7 +34,7 @@ class PrintSelectedBacklogItem extends React.Component{
     render(){
         return (
             <div>
-                <Button className="Function_Button" bsStyle="link" bsSize="small" onClick={this.submitBacklogItem}>
+                <Button className="Function_Button" bsStyle="link" bsSize="small" onClick={this.submit}>
                     <img src="../delete.png" alt="Print Selected Backlog Item"/>Print Selected Backlog Item
                 </Button>
             </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
 
-class PrintCommittedBacklogItem extends React.Component{
+class PrintScheduledBacklogItem extends React.Component{
     constructor(props){
         super(props);
 
@@ -10,7 +10,10 @@ class PrintCommittedBacklogItem extends React.Component{
     }
 
     submit(){
-        axios('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/sprints/' + this.props.selectedSprintId + '/printable_committed_backlog_items/pdf', {
+        if(this.props.selectedRelease === undefined){
+            return;
+        }
+        axios('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/releases/' + this.props.selectedRelease.releaseId + '/printable_scheduled_backlog_items/pdf', {
             method: 'GET',
             responseType: 'blob'
         })
@@ -38,4 +41,4 @@ class PrintCommittedBacklogItem extends React.Component{
         );
     }
 }
-export default PrintCommittedBacklogItem;
+export default PrintScheduledBacklogItem;

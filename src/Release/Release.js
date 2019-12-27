@@ -4,12 +4,14 @@ import SideBar from '../SideBar.js';
 import AddRelease from './AddRelease.js';
 import EditRelease from './EditRelease.js';
 import DeleteRelease from './DeleteRelease.js';
-import ViewRelease from './ViewRelease.js';
 import AddBacklogItem from './AddBacklogItem.js';
 import ScheduleBacklogItem from './ScheduleBacklogItem.js';
-import UnscheduleBacklogItem from './UnscheduleBacklogItem.js';
+import ShowReleaseInformation from './ShowReleaseInformation.js';
+import PrintScheduledBacklogItem from './PrintScheduledBacklogItem.js';
+import ViewRelease from './ViewRelease.js';
 import EditBacklogItem from './EditBacklogItem.js';
 import DeleteBacklogItem from './DeleteBacklogItem.js';
+import UnscheduleBacklogItem from './UnscheduleBacklogItem.js';
 import ViewScheduledBacklogItem from './ViewScheduledBacklogItem.js';
 import { Redirect } from 'react-router-dom';
 
@@ -124,6 +126,8 @@ class Release extends React.Component {
               <DeleteRelease getAllRelease={this.getAllRelease} clearAllScheduledBacklogItemAfterDeleteRelease={this.clearAllScheduledBacklogItemAfterDeleteRelease} selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct}/>
               <AddBacklogItem getAllScheduledBacklogItem={this.getAllScheduledBacklogItem} selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct} disabled={this.state.isReleaseOverdue}/>
               <ScheduleBacklogItem getAllScheduledBacklogItem={this.getAllScheduledBacklogItem} selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct} disabled={this.state.isReleaseOverdue}/>
+              <ShowReleaseInformation selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct}/>
+              <PrintScheduledBacklogItem selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct}/>
             </div>
             <ViewRelease releaseData={this.state.releaseData} handleReleaseRowSelect={this.handleReleaseRowSelect}/>
             <div style = {{display : 'flex'}}>
