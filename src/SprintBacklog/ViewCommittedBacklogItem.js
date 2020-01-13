@@ -103,7 +103,7 @@ class ViewCommittedBacklogItem extends React.Component {
             let toDoBacklogItem;
             let doneBacklogItem;
             let isStoryDone = false;
-            let storyCard = <StoryCard onStoryDragStart={this.onStoryDragStart} backlogItemId={backlogItem.backlogItemId} orderId={backlogItem.orderId} description={backlogItem.description} estimate={backlogItem.estimate} importance={backlogItem.importance} notes={backlogItem.notes} status={backlogItem.status}
+            let storyCard = <StoryCard onStoryDragStart={this.onStoryDragStart} backlogItem={backlogItem}
             getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId} selectedProduct={this.props.selectedProduct} isSprintOverdue={this.props.isSprintOverdue}/>;
             if(backlogItem.status === "To do"){
                 toDoBacklogItem = storyCard;
@@ -120,7 +120,7 @@ class ViewCommittedBacklogItem extends React.Component {
                     data.taskList.forEach(task =>{
                         let taskCard = 
                         <div key={"task_card_" + task.orderId}>
-                            <TaskCard onTaskDragStart={this.onTaskDragStart} taskId={task.taskId} orderId={task.orderId} description={task.description} status={task.status} estimate={task.estimate} remains={task.remains} notes={task.notes} backlogItemId={backlogItem.backlogItemId}
+                            <TaskCard onTaskDragStart={this.onTaskDragStart} task={task}
                             getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId} isSprintOverdue={this.props.isSprintOverdue}/>
                         </div>
                         if(task.status === "To do"){

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form, FormControl, FormGroup, Col, ControlLabel } from 'react-bootstrap';
+import AssignTag from './AssignTag';
 
 class AddBacklogItem extends React.Component{
     constructor(props){
@@ -11,11 +12,13 @@ class AddBacklogItem extends React.Component{
             description: '',
             estimate: '',
             importance: '',
-            notes: ''
+            notes: '', 
+            tags: []
         };
 
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleRowSelect = this.handleRowSelect.bind(this);
         this.descriptionOnChange = this.descriptionOnChange.bind(this);
         this.estimateOnChange = this.estimateOnChange.bind(this);
         this.importanceOnChange = this.importanceOnChange.bind(this);
@@ -33,8 +36,24 @@ class AddBacklogItem extends React.Component{
             description : '',
             estimate : '',
             importance : '',
-            notes : ''
+            notes : '', 
+            tags : []
         });
+    }
+
+    handleRowSelect(row, isSelected) {
+        let tags = this.state.tags;
+        if (isSelected) {
+            tags.push(row);
+        } else {
+            for(var i = 0; i < tags.length; i++){
+                if(tags[i].tagId === row.tagId) {
+                    tags.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        this.setState({tags : tags});
     }
 
     descriptionOnChange(e){
@@ -73,10 +92,22 @@ class AddBacklogItem extends React.Component{
             let errorMessage = response.data.errorMessage;
             if(addSuccess === false){
                 alert(errorMessage);
-            }else{
+                return;
+            }
+            axios.post('http://localhost:8080/ezScrum/backlog_items/' + response.data.backlogItemId + '/assigned_tags',{
+                tagIds : self.state.tags.map(tag => tag.tagId)
+            }).then(function (response) {
+                let assignSuccess = response.data.assignSuccess;
+                let errorMessage = response.data.errorMessage;
+                if(assignSuccess === false){
+                    alert(errorMessage);
+                    return;
+                }
                 self.handleClose();
                 self.props.getAllBacklogItem();
-            }
+            }).catch(function (error){
+                console.log(error);
+            });
         }).catch(function (error){
             console.log(error);
         });
@@ -126,6 +157,9 @@ class AddBacklogItem extends React.Component{
                                 <Col sm={10}>
                                     <FormControl componentClass="textarea" onInput={this.notesOnChange} />
                                 </Col>
+                            </FormGroup>
+                            <FormGroup>
+                                <AssignTag tags={this.state.tags} selectedProduct={this.props.selectedProduct} handleRowSelect={this.handleRowSelect}/>
                             </FormGroup>
                             <Col componentClass={ControlLabel}>
                                 (Note: * denotes a required field)

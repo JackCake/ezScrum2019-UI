@@ -2,48 +2,47 @@ import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form } from 'react-bootstrap';
 
-class DeleteBacklogItem extends React.Component{
+class DeleteTag extends React.Component{
     constructor(props){
         super(props);
 
         this.state = {
             show : false,
-            backlogItemId: ''
+            tagId: ''
         };
 
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.submitBacklogItem = this.submitBacklogItem.bind(this);
+        this.submitTag = this.submitTag.bind(this);
     }
     handleShow(){
-        if(this.props.selectedBacklogItem === undefined){
+        if(this.props.selectedTag === undefined){
             return;
         }
         this.setState({
             show : true,
-            backlogItemId : this.props.selectedBacklogItem.backlogItemId
+            tagId : this.props.selectedTag.tagId
         });
     }
 
     handleClose(){
         this.setState({
             show : false,
-            backlogItemId : ''
+            tagId : ''
         });
     }
 
-    submitBacklogItem(){
+    submitTag(){
         let self = this;
-        axios.delete('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/backlog_items/' + this.state.backlogItemId)
+        axios.delete('http://localhost:8080/ezScrum/tags/' + this.state.tagId)
         .then(function (response) {
             let deleteSuccess = response.data.deleteSuccess;
             let errorMessage = response.data.errorMessage;
             if(deleteSuccess === false){
                 alert(errorMessage);
-                return;
             }
             self.handleClose();
-            self.props.getAllBacklogItem();
+            self.props.getAllTag();
         }).catch(function (error){
             console.log(error);
         });
@@ -53,19 +52,19 @@ class DeleteBacklogItem extends React.Component{
         return (
             <div>
                 <Button className="Function_Button" bsStyle="link" bsSize="small" onClick={this.handleShow}>
-                    <img src="../delete.png" alt="Delete Backlog Item"/>Delete Backlog Item
+                    <img src="../delete.png" alt="Delete Tag"/>Delete Tag
                 </Button>
                 <Modal show={this.state.show} onHide={this.handleClose}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Delete Backlog Item</Modal.Title>
+                        <Modal.Title>Delete Tag</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form horizontal>
-                            Do you want to delete backlog item?
+                            Do you want to delete tag?
                         </Form>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button onClick={this.submitBacklogItem}>Submit</Button>
+                        <Button onClick={this.submitTag}>Submit</Button>
                         <Button onClick={this.handleClose}>Cancel</Button>
                     </Modal.Footer>
                 </Modal>
@@ -73,4 +72,4 @@ class DeleteBacklogItem extends React.Component{
         );
     }
 }
-export default DeleteBacklogItem;
+export default DeleteTag;

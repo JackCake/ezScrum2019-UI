@@ -5,12 +5,13 @@ import EditBacklogItem from "./EditBacklogItem.js";
 import DeleteBacklogItem from "./DeleteBacklogItem.js";
 import DropBacklogItem from "./DropBacklogItem.js";
 import ViewBacklogItemHistory from './ViewBacklogItemHistory.js';
+import ViewAssignedTag from "../BacklogItem/ViewAssignedTag";
 
 class StoryCard extends React.Component {
     
     render(){
         return(
-            <div draggable onDragStart = {(e) => this.props.onStoryDragStart(e, this.props.backlogItemId, this.props.status)}>
+            <div draggable onDragStart = {(e) => this.props.onStoryDragStart(e, this.props.backlogItem.backlogItemId, this.props.backlogItem.status)}>
                 <table className="StoryCard_Table">
                     <tbody>
                         <tr>
@@ -19,18 +20,18 @@ class StoryCard extends React.Component {
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <h5>Story #{this.props.orderId}</h5>
+                                                <h5>Story #{this.props.backlogItem.orderId}</h5>
                                             </td>
                                             <td className="Card_Button">
-                                                <AddTask backlogItemId={this.props.backlogItemId} status={this.props.status}
+                                                <AddTask backlogItem={this.props.backlogItem}
                                                 getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId} selectedProduct={this.props.selectedProduct} isSprintOverdue={this.props.isSprintOverdue}/>
-                                                <EditBacklogItem backlogItemId={this.props.backlogItemId} description={this.props.description} estimate={this.props.estimate} importance={this.props.importance} notes={this.props.notes} 
+                                                <EditBacklogItem backlogItem={this.props.backlogItem} 
                                                 getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId} selectedProduct={this.props.selectedProduct} isSprintOverdue={this.props.isSprintOverdue}/>
-                                                <DeleteBacklogItem backlogItemId={this.props.backlogItemId}
+                                                <DeleteBacklogItem backlogItem={this.props.backlogItem}
                                                 getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId} selectedProduct={this.props.selectedProduct} isSprintOverdue={this.props.isSprintOverdue}/>
-                                                <DropBacklogItem backlogItemId={this.props.backlogItemId}
+                                                <DropBacklogItem backlogItem={this.props.backlogItem}
                                                 getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId} selectedProduct={this.props.selectedProduct} isSprintOverdue={this.props.isSprintOverdue}/>
-                                                <ViewBacklogItemHistory backlogItemId={this.props.backlogItemId}/>
+                                                <ViewBacklogItemHistory backlogItem={this.props.backlogItem}/>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -39,10 +40,15 @@ class StoryCard extends React.Component {
                         </tr>
                         <tr>
                             <td className="StoryCard_Description">
-                                {this.props.description}
+                                {this.props.backlogItem.description}
                             </td>
                             <td className="StoryCard_Value">
-                                {this.props.estimate} Point
+                                {this.props.backlogItem.estimate} Point
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan="2">
+                                <ViewAssignedTag tags={this.props.backlogItem.assignedTagList}/>
                             </td>
                         </tr>
                     </tbody>

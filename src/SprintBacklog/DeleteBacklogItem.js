@@ -24,7 +24,7 @@ class DeleteBacklogItem extends React.Component{
         if(confirmDelete === true){
             this.setState({
                 show : true,
-                backlogItemId : this.props.backlogItemId
+                backlogItemId : this.props.backlogItem.backlogItemId
             });
         }
     }

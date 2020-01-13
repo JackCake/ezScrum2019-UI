@@ -24,7 +24,7 @@ class DropBacklogItem extends React.Component{
         if(confirmDrop === true){
             this.setState({
                 show : true,
-                backlogItemId : this.props.backlogItemId
+                backlogItemId : this.props.backlogItem.backlogItemId
             });
         }
     }

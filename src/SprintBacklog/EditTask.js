@@ -33,11 +33,11 @@ class EditTask extends React.Component{
         if(confirmEdit === true){
             this.setState({
                 show : true,
-                taskId : this.props.taskId,
-                description : this.props.description,
-                estimate : this.props.estimate,
-                remains : this.props.remains,
-                notes : this.props.notes
+                taskId : this.props.task.taskId,
+                description : this.props.task.description,
+                estimate : this.props.task.estimate,
+                remains : this.props.task.remains,
+                notes : this.props.task.notes
             });
         }
     }
@@ -80,7 +80,7 @@ class EditTask extends React.Component{
         }
         let estimate = this.state.estimate === '' ? 0 : this.state.estimate;
         let remains = 0;
-        if(this.props.status === "To do"){
+        if(this.props.task.status === "To do"){
             remains = estimate;
         } else if(this.state.remains){
             remains = this.state.remains;
@@ -138,7 +138,7 @@ class EditTask extends React.Component{
                                     Remains:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="input" type="text" maxLength="2" pattern="[0-9]*" onInput={this.remainsOnChange} defaultValue={this.state.remains} disabled={this.props.status !== "Doing"}/>
+                                    <FormControl componentClass="input" type="text" maxLength="2" pattern="[0-9]*" onInput={this.remainsOnChange} defaultValue={this.state.remains} disabled={this.props.task.status !== "Doing"}/>
                                 </Col>
                             </FormGroup>
                             <FormGroup>

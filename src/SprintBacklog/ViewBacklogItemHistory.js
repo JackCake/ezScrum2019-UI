@@ -36,7 +36,7 @@ class ViewBacklogItemHistory extends React.Component{
 
     getBacklogItemHistories(){
         let self =this;
-        axios.get('http://localhost:8080/ezScrum/backlog_items/' + this.props.backlogItemId + '/histories')
+        axios.get('http://localhost:8080/ezScrum/backlog_items/' + this.props.backlogItem.backlogItemId + '/histories')
         .then(function (response) {
             let backlogItemHistoryList = response.data.backlogItemHistoryList;
             self.setState({backlogItemHistoryList : backlogItemHistoryList});

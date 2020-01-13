@@ -36,8 +36,17 @@ class ViewBacklogItem extends React.Component {
         </TableHeaderColumn>
 
         <TableHeaderColumn 
+            dataField="tagList"
+            width="10%"
+            dataSort={false}
+            columnTitle
+        >
+            Tag
+        </TableHeaderColumn>
+
+        <TableHeaderColumn 
             dataField="description"
-            width="40%"
+            width="30%"
             dataSort={false}
             columnTitle
         >

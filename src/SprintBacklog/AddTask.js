@@ -54,7 +54,7 @@ class AddTask extends React.Component{
             return;
         }
         let self = this;
-        axios.post('http://localhost:8080/ezScrum/committed_backlog_items/' + this.props.backlogItemId + '/tasks',{
+        axios.post('http://localhost:8080/ezScrum/committed_backlog_items/' + this.props.backlogItem.backlogItemId + '/tasks',{
             description : this.state.description,
             estimate : this.state.estimate === '' ? 0 : this.state.estimate,
             notes : this.state.notes
@@ -69,7 +69,7 @@ class AddTask extends React.Component{
     render(){
         return (
             <div>
-                <Button bsStyle="link" bsSize="xsmall" onClick={this.handleShow} disabled={this.props.isSprintOverdue || this.props.status === "Done"}>
+                <Button bsStyle="link" bsSize="xsmall" onClick={this.handleShow} disabled={this.props.isSprintOverdue || this.props.backlogItem.status === "Done"}>
                     <img src="../add.png" alt="Add Task"/>
                 </Button>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form, FormControl, FormGroup, Col, ControlLabel } from 'react-bootstrap';
+import AssignTag from '../BacklogItem/AssignTag';
 
 class EditBacklogItem extends React.Component{
     constructor(props){
@@ -12,11 +13,13 @@ class EditBacklogItem extends React.Component{
             description: '',
             estimate: '',
             importance: '',
-            notes: ''
+            notes: '', 
+            tags: []
         };
 
         this.handleShow = this.handleShow.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleRowSelect = this.handleRowSelect.bind(this);
         this.descriptionOnChange = this.descriptionOnChange.bind(this);
         this.estimateOnChange = this.estimateOnChange.bind(this);
         this.importanceOnChange = this.importanceOnChange.bind(this);
@@ -33,7 +36,8 @@ class EditBacklogItem extends React.Component{
             description : this.props.selectedScheduledBacklogItem.description,
             estimate : this.props.selectedScheduledBacklogItem.estimate,
             importance : this.props.selectedScheduledBacklogItem.importance,
-            notes : this.props.selectedScheduledBacklogItem.notes
+            notes : this.props.selectedScheduledBacklogItem.notes, 
+            tags: this.props.selectedScheduledBacklogItem.assignedTagList
         });
     }
 
@@ -44,8 +48,24 @@ class EditBacklogItem extends React.Component{
             description : '',
             estimate : '',
             importance : '',
-            notes : ''
+            notes : '', 
+            tags: []
         });
+    }
+
+    handleRowSelect(row, isSelected) {
+        let tags = this.state.tags;
+        if (isSelected) {
+            tags.push(row);
+        } else {
+            for(var i = 0; i < tags.length; i++){
+                if(tags[i].tagId === row.tagId) {
+                    tags.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        this.setState({tags : tags});
     }
 
     descriptionOnChange(e){
@@ -84,9 +104,22 @@ class EditBacklogItem extends React.Component{
             let errorMessage = response.data.errorMessage;
             if(editSuccess === false){
                 alert(errorMessage);
+                return;
             }
-            self.handleClose();
-            self.props.getAllScheduledBacklogItem(self.props.selectedRelease.releaseId)
+            axios.post('http://localhost:8080/ezScrum/backlog_items/' + self.state.backlogItemId + '/assigned_tags',{
+                tagIds : self.state.tags.map(tag => tag.tagId)
+            }).then(function (response) {
+                let assignSuccess = response.data.assignSuccess;
+                let errorMessage = response.data.errorMessage;
+                if(assignSuccess === false){
+                    alert(errorMessage);
+                    return;
+                }
+                self.handleClose();
+                self.props.getAllScheduledBacklogItem(self.props.selectedRelease.releaseId)
+            }).catch(function (error){
+                console.log(error);
+            });
         }).catch(function (error){
             console.log(error);
         });
@@ -136,6 +169,9 @@ class EditBacklogItem extends React.Component{
                                 <Col sm={10}>
                                     <FormControl componentClass="textarea" onInput={this.notesOnChange} defaultValue={this.state.notes}/>
                                 </Col>
+                            </FormGroup>
+                            <FormGroup>
+                                <AssignTag tags={this.state.tags} selectedProduct={this.props.selectedProduct} handleRowSelect={this.handleRowSelect}/>
                             </FormGroup>
                             <Col componentClass={ControlLabel}>
                                 (Note: * denotes a required field)

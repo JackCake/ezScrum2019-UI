@@ -7,7 +7,7 @@ import ViewTaskHistory from "./ViewTaskHistory.js";
 class TaskCard extends React.Component {
     render(){
         return(
-            <div draggable onDragStart = {(e) => this.props.onTaskDragStart(e, this.props.taskId, this.props.backlogItemId, this.props.status)}>
+            <div draggable onDragStart = {(e) => this.props.onTaskDragStart(e, this.props.task.taskId, this.props.task.backlogItemId, this.props.task.status)}>
                 <table className="TaskCard_Table">
                     <tbody>
                         <tr>
@@ -16,13 +16,13 @@ class TaskCard extends React.Component {
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <h5>Task #{this.props.orderId}</h5>
+                                                <h5>Task #{this.props.task.orderId}</h5>
                                             </td>
                                             <td className="Card_Button">
-                                                <EditTask taskId={this.props.taskId} description={this.props.description} status={this.props.status} estimate={this.props.estimate} remains={this.props.remains} notes={this.props.notes}
+                                                <EditTask task={this.props.task}
                                                 getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId} isSprintOverdue={this.props.isSprintOverdue}/>
-                                                <DeleteTask taskId={this.props.taskId} getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId} isSprintOverdue={this.props.isSprintOverdue}/>
-                                                <ViewTaskHistory taskId={this.props.taskId}/>
+                                                <DeleteTask task={this.props.task} getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId} isSprintOverdue={this.props.isSprintOverdue}/>
+                                                <ViewTaskHistory task={this.props.task}/>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -31,10 +31,10 @@ class TaskCard extends React.Component {
                         </tr>
                         <tr>
                             <td className="TaskCard_Description">
-                                {this.props.description}
+                                {this.props.task.description}
                             </td>
                             <td className="TaskCard_Value">
-                                {this.props.remains} hr
+                                {this.props.task.remains} hr
                             </td>
                         </tr>
                     </tbody>

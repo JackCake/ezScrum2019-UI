@@ -24,7 +24,7 @@ class DeleteTask extends React.Component{
         if(confirmDelete === true){
             this.setState({
                 show : true,
-                taskId : this.props.taskId
+                taskId : this.props.task.taskId
             });
         }
     }
@@ -32,7 +32,7 @@ class DeleteTask extends React.Component{
     handleClose(){
         this.setState({
             show : false,
-            taskId : this.props.taskId
+            taskId : ''
         });
     }
 

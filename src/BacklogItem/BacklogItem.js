@@ -5,8 +5,9 @@ import AddBacklogItem from './AddBacklogItem.js';
 import EditBacklogItem from './EditBacklogItem.js';
 import ViewBacklogItem from './ViewBacklogItem.js';
 import DeleteBacklogItem from './DeleteBacklogItem.js';
-import { Redirect } from 'react-router-dom';
 import PrintSelectedBacklogItem from './PrintSelectedBacklogItem.js';
+import Tag from './Tag.js';
+import { Redirect } from 'react-router-dom';
 
 class BacklogItem extends React.Component {
   constructor(props){
@@ -35,6 +36,12 @@ class BacklogItem extends React.Component {
           if(backlogItemList[i].sprintOrderId === 0){
             backlogItemList[i].sprintOrderId = '';
           }
+          let tagList = [];
+          for(var j = 0; j < backlogItemList[i].assignedTagList.length; j++){
+            let assignedTag = backlogItemList[i].assignedTagList[j];
+            tagList.push(assignedTag.name);
+          }
+          backlogItemList[i].tagList = tagList;
       }
       let selectedBacklogItem = self.state.selectedBacklogItem;
       if(selectedBacklogItem !== undefined){
@@ -78,6 +85,7 @@ class BacklogItem extends React.Component {
               <EditBacklogItem getAllBacklogItem={this.getAllBacklogItem} selectedBacklogItem={this.state.selectedBacklogItem} selectedProduct={this.props.location.state.selectedProduct}/>
               <DeleteBacklogItem getAllBacklogItem={this.getAllBacklogItem} selectedBacklogItem={this.state.selectedBacklogItem} selectedProduct={this.props.location.state.selectedProduct}/>
               <PrintSelectedBacklogItem selectedBacklogItem={this.state.selectedBacklogItem} selectedProduct={this.props.location.state.selectedProduct}/>
+              <Tag selectedProduct={this.props.location.state.selectedProduct}/>
             </div>
             <ViewBacklogItem backlogItemData={this.state.backlogItemData} handleRowSelect={this.handleRowSelect}/>
           </div>

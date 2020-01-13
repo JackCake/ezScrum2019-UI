@@ -36,7 +36,7 @@ class ViewTaskHistory extends React.Component{
 
     getTaskHistories(){
         let self =this;
-        axios.get('http://localhost:8080/ezScrum/tasks/' + this.props.taskId + '/histories')
+        axios.get('http://localhost:8080/ezScrum/tasks/' + this.props.task.taskId + '/histories')
         .then(function (response) {
             let taskHistoryList = response.data.taskHistoryList;
             self.setState({taskHistoryList : taskHistoryList});

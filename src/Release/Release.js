@@ -64,6 +64,14 @@ class Release extends React.Component {
     axios.get('http://localhost:8080/ezScrum/products/' + this.props.location.state.selectedProduct.productId + '/releases/' + selectedReleaseId + '/scheduled_backlog_items')
     .then(function (response) {
         let scheduledBacklogItemList = response.data.scheduledBacklogItemList;
+        for(var i = 0; i < scheduledBacklogItemList.length; i++){
+          let tagList = [];
+          for(var j = 0; j < scheduledBacklogItemList[i].assignedTagList.length; j++){
+            let assignedTag = scheduledBacklogItemList[i].assignedTagList[j];
+            tagList.push(assignedTag.name);
+          }
+          scheduledBacklogItemList[i].tagList = tagList;
+        }
         let selectedScheduledBacklogItem = self.state.selectedScheduledBacklogItem;
         if(selectedScheduledBacklogItem !== undefined){
           let selectedScheduledBacklogItemList = scheduledBacklogItemList.filter(function(scheduleBacklogItem){
@@ -131,7 +139,7 @@ class Release extends React.Component {
             </div>
             <ViewRelease releaseData={this.state.releaseData} handleReleaseRowSelect={this.handleReleaseRowSelect}/>
             <div style = {{display : 'flex'}}>
-              <EditBacklogItem getAllScheduledBacklogItem={this.getAllScheduledBacklogItem} selectedScheduledBacklogItem={this.state.selectedScheduledBacklogItem} selectedRelease={this.state.selectedRelease}/>
+              <EditBacklogItem getAllScheduledBacklogItem={this.getAllScheduledBacklogItem} selectedScheduledBacklogItem={this.state.selectedScheduledBacklogItem} selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct}/>
               <DeleteBacklogItem getAllScheduledBacklogItem={this.getAllScheduledBacklogItem} selectedScheduledBacklogItem={this.state.selectedScheduledBacklogItem} selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct}/>
               <UnscheduleBacklogItem getAllScheduledBacklogItem={this.getAllScheduledBacklogItem} selectedScheduledBacklogItem={this.state.selectedScheduledBacklogItem} 
               selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct} isReleaseOverdue={this.state.isReleaseOverdue}/>
