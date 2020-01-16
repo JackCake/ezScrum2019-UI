@@ -59,6 +59,12 @@ class AddTask extends React.Component{
             estimate : this.state.estimate === '' ? 0 : this.state.estimate,
             notes : this.state.notes
         }).then(function (response) {
+            let addSuccess = response.data.addSuccess;
+            let errorMessage = response.data.errorMessage;
+            if(addSuccess === false){
+                alert(errorMessage);
+                return;
+            }
             self.handleClose();
             self.props.getAllCommittedBacklogItem(self.props.selectedSprintId);
         }).catch(function (error){
