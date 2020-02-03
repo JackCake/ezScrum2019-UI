@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form, FormControl, FormGroup, Col, ControlLabel } from 'react-bootstrap';
+import Config from '../config.js';
 import AssignTag from './AssignTag';
 
 class EditBacklogItem extends React.Component{
@@ -94,7 +95,7 @@ class EditBacklogItem extends React.Component{
             return;
         }
         let self = this;
-        axios.put('http://localhost:8080/ezScrum/backlog_items/' + this.state.backlogItemId, {
+        axios.put(Config.back_end_host + Config.ezScrum_api + '/backlog_items/' + this.state.backlogItemId, {
             description : this.state.description,
             estimate : this.state.estimate === '' ? 0 : this.state.estimate,
             importance : this.state.importance === '' ? 0 : this.state.importance,
@@ -106,7 +107,7 @@ class EditBacklogItem extends React.Component{
                 alert(errorMessage);
                 return;
             }
-            axios.post('http://localhost:8080/ezScrum/backlog_items/' + self.state.backlogItemId + '/assigned_tags',{
+            axios.post(Config.back_end_host + Config.ezScrum_api + '/backlog_items/' + self.state.backlogItemId + '/assigned_tags',{
                 tagIds : self.state.tags.map(tag => tag.tagId)
             }).then(function (response) {
                 let assignSuccess = response.data.assignSuccess;
@@ -119,9 +120,11 @@ class EditBacklogItem extends React.Component{
                 self.props.getAllBacklogItem();
             }).catch(function (error){
                 console.log(error);
+                window.location.href = Config.front_end_host;
             });
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
         
     }
@@ -143,7 +146,7 @@ class EditBacklogItem extends React.Component{
                                     *Description:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="textarea" placeholder="input story description..." onInput={this.descriptionOnChange} defaultValue={this.state.description}/>
+                                    <FormControl componentClass="textarea" maxLength="255" placeholder="input story description..." onInput={this.descriptionOnChange} defaultValue={this.state.description}/>
                                 </Col>
                             </FormGroup>
                             <FormGroup>

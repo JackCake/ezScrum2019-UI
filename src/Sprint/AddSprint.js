@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form, FormControl, FormGroup, Col, ControlLabel } from 'react-bootstrap';
+import Config from '../config.js';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -120,7 +121,7 @@ class AddSprint extends React.Component{
             return;
         }
         let self = this;
-        axios.post('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/sprints',{
+        axios.post(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.selectedProduct.productId + '/sprints',{
             goal : self.state.goal,
             interval : self.state.interval === '' ? 0 : self.state.interval,
             startDate : startDate,
@@ -133,12 +134,14 @@ class AddSprint extends React.Component{
             let errorMessage = response.data.errorMessage;
             if(addSuccess === false){
                 alert(errorMessage);
+                return;
             }else{
                 self.handleClose();
                 self.props.getAllSprint();
             }
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 
@@ -160,7 +163,7 @@ class AddSprint extends React.Component{
                                     *Goal:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="textarea" placeholder="input sprint goal..." onInput={this.goalOnChange}/>
+                                    <FormControl componentClass="textarea" maxLength="255" placeholder="input sprint goal..." onInput={this.goalOnChange}/>
                                 </Col>
                             </FormGroup>
                             <FormGroup>
@@ -195,7 +198,7 @@ class AddSprint extends React.Component{
                                     Demo Place:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="input" placeholder="input demo place..." onInput={this.demoPlaceOnChange}/>
+                                    <FormControl componentClass="input" maxLength="50" placeholder="input demo place..." onInput={this.demoPlaceOnChange}/>
                                 </Col>
                             </FormGroup>
                             <FormGroup>
@@ -212,7 +215,7 @@ class AddSprint extends React.Component{
                                     Time and Place for Daily Scrum:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="input" placeholder="input daily time and daily place..." onInput={this.dailyOnChange}/>
+                                    <FormControl componentClass="input" maxLength="50" placeholder="input daily time and daily place..." onInput={this.dailyOnChange}/>
                                 </Col>
                             </FormGroup>
                             <Col componentClass={ControlLabel}>

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form, FormControl, FormGroup, Col, ControlLabel } from 'react-bootstrap';
+import Config from '../config.js';
 import AssignTag from '../BacklogItem/AssignTag';
 
 class EditBacklogItem extends React.Component{
@@ -30,15 +31,22 @@ class EditBacklogItem extends React.Component{
         if(this.props.selectedScheduledBacklogItem === undefined){
             return;
         }
-        this.setState({
-            show : true,
-            backlogItemId : this.props.selectedScheduledBacklogItem.backlogItemId,
-            description : this.props.selectedScheduledBacklogItem.description,
-            estimate : this.props.selectedScheduledBacklogItem.estimate,
-            importance : this.props.selectedScheduledBacklogItem.importance,
-            notes : this.props.selectedScheduledBacklogItem.notes, 
-            tags: this.props.selectedScheduledBacklogItem.assignedTagList
-        });
+        let isReleaseOverdue = this.props.isReleaseOverdue;
+        let confirmEdit = true;
+        if(isReleaseOverdue === true){
+            confirmEdit = window.confirm("The release is overdue, are you sure to edit the story?");
+        }
+        if(confirmEdit === true){
+            this.setState({
+                show : true,
+                backlogItemId : this.props.selectedScheduledBacklogItem.backlogItemId,
+                description : this.props.selectedScheduledBacklogItem.description,
+                estimate : this.props.selectedScheduledBacklogItem.estimate,
+                importance : this.props.selectedScheduledBacklogItem.importance,
+                notes : this.props.selectedScheduledBacklogItem.notes, 
+                tags: this.props.selectedScheduledBacklogItem.assignedTagList
+            });
+        }
     }
 
     handleClose(){
@@ -94,7 +102,7 @@ class EditBacklogItem extends React.Component{
             return;
         }
         let self = this;
-        axios.put('http://localhost:8080/ezScrum/backlog_items/' + this.state.backlogItemId, {
+        axios.put(Config.back_end_host + Config.ezScrum_api + '/backlog_items/' + this.state.backlogItemId, {
             description : this.state.description,
             estimate : this.state.estimate === '' ? 0 : this.state.estimate,
             importance : this.state.importance === '' ? 0 : this.state.importance,
@@ -106,7 +114,7 @@ class EditBacklogItem extends React.Component{
                 alert(errorMessage);
                 return;
             }
-            axios.post('http://localhost:8080/ezScrum/backlog_items/' + self.state.backlogItemId + '/assigned_tags',{
+            axios.post(Config.back_end_host + Config.ezScrum_api + '/backlog_items/' + self.state.backlogItemId + '/assigned_tags',{
                 tagIds : self.state.tags.map(tag => tag.tagId)
             }).then(function (response) {
                 let assignSuccess = response.data.assignSuccess;
@@ -119,9 +127,11 @@ class EditBacklogItem extends React.Component{
                 self.props.getAllScheduledBacklogItem(self.props.selectedRelease.releaseId)
             }).catch(function (error){
                 console.log(error);
+                window.location.href = Config.front_end_host;
             });
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
         
     }
@@ -143,7 +153,7 @@ class EditBacklogItem extends React.Component{
                                     *Description:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="textarea" placeholder="input story description..." onInput={this.descriptionOnChange} defaultValue={this.state.description}/>
+                                    <FormControl componentClass="textarea" maxLength="255" placeholder="input story description..." onInput={this.descriptionOnChange} defaultValue={this.state.description}/>
                                 </Col>
                             </FormGroup>
                             <FormGroup>

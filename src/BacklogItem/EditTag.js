@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Form, FormControl, Row, Col} from 'react-bootstrap';
+import Config from '../config.js';
 
 class EditTag extends React.Component{
     constructor(props){
@@ -24,19 +25,26 @@ class EditTag extends React.Component{
             alert('The name is required.');
             return;
         }
+        let tagId = this.props.row.tagId;
+        if(this.props.tagData.some(tag => tag.tagId !== tagId && tag.name === this.state.name)){
+            alert('There is the same name of the tag.');
+            return;
+        }
         let self = this;
-        axios.put('http://localhost:8080/ezScrum/tags/' + this.props.row.tagId, {
+        axios.put(Config.back_end_host + Config.ezScrum_api + '/tags/' + tagId, {
             name : this.state.name
         }).then(function (response) {
             let editSuccess = response.data.editSuccess;
             let errorMessage = response.data.errorMessage;
             if(editSuccess === false){
                 alert(errorMessage);
+                return;
             }
             self.props.getAllTag();
             self.props.onUpdate(self.state.name);
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 

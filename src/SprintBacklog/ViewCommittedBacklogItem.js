@@ -1,5 +1,6 @@
 import React from "react";
 import axios from 'axios';
+import Config from '../config.js';
 import { Column, Row } from 'simple-flexbox';
 import '../TaskBoard.css'
 import StoryCard from './StoryCard.js';
@@ -42,12 +43,7 @@ class ViewCommittedBacklogItem extends React.Component {
         if(status === changedStatus){
             return;
         }
-        let confirmMove = true;
-        if(this.props.isSprintOverdue){
-            confirmMove = window.confirm("The sprint is overdue.");
-        }
-        if(confirmMove === true){
-            let category = e.dataTransfer.getData("category");
+        let category = e.dataTransfer.getData("category");
             let self = this;
             if(category === "story"){
                 if(changedStatus === "Doing"){
@@ -56,17 +52,25 @@ class ViewCommittedBacklogItem extends React.Component {
                 if(changedStatus === "Done" && isAllTaskDone === false){
                     return;
                 }
-                axios.put('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/backlog_item_statuses/' + backlogItemId, {
+                if(this.props.isSprintOverdue){
+                    let confirmMove = window.confirm("The sprint is overdue, are you sure to move it?");
+                    if(confirmMove === false){
+                        return;                    
+                    }
+                }
+                axios.put(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.selectedProduct.productId + '/backlog_item_statuses/' + backlogItemId, {
                     status : changedStatus
                 }).then(function (response) {
                     let moveSuccess = response.data.moveSuccess;
                     let errorMessage = response.data.errorMessage;
                     if(moveSuccess === false){
                         alert(errorMessage);
+                        return;
                     }
                     self.props.getAllCommittedBacklogItem(self.props.selectedSprintId);
                 }).catch(function (error){
                     console.log(error);
+                    window.location.href = Config.front_end_host;
                 });
             }else if(category === "task"){
                 let taskId = e.dataTransfer.getData("taskId");
@@ -80,7 +84,13 @@ class ViewCommittedBacklogItem extends React.Component {
                 if(status === "Done" && changedStatus === "To do"){
                     return;
                 }
-                axios.put('http://localhost:8080/ezScrum/task_statuses/' + taskId, {
+                if(this.props.isSprintOverdue){
+                    let confirmMove = window.confirm("The sprint is overdue, are you sure to move it?");
+                    if(confirmMove === false){
+                        return;                    
+                    }
+                }
+                axios.put(Config.back_end_host + Config.ezScrum_api + '/task_statuses/' + taskId, {
                     taskId : taskId,
                     status : changedStatus
                 }).then(function (response) {
@@ -88,13 +98,14 @@ class ViewCommittedBacklogItem extends React.Component {
                     let errorMessage = response.data.errorMessage;
                     if(moveSuccess === false){
                         alert(errorMessage);
+                        return;
                     }
                     self.props.getAllCommittedBacklogItem(self.props.selectedSprintId);
                 }).catch(function (error){
                     console.log(error);
+                    window.location.href = Config.front_end_host;
                 });
             }
-        }
     }
 
     composeStories(){

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form, FormControl, FormGroup, Col, ControlLabel } from 'react-bootstrap';
+import Config from '../config.js';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -76,18 +77,6 @@ class EditRelease extends React.Component{
             alert('The name is required.');
             return;
         }
-        if(this.state.startDate === ''){
-            alert('The startDate is required.');
-            return;
-        }
-        if(this.state.endDate === ''){
-            alert('The endDate is required.');
-            return;
-        }
-        if(this.state.description === ''){
-            alert('The description is required.');
-            return;
-        }
         let startDate = moment(this.state.startDate).format('YYYY-MM-DD');
         let endDate = moment(this.state.endDate).format('YYYY-MM-DD');
         if(moment(startDate, 'YYYY-MM-DD', true).isValid() === false){
@@ -98,25 +87,22 @@ class EditRelease extends React.Component{
             alert('The format of the end date is not correct.');
             return;
         }
+        if(this.state.description === ''){
+            alert('The description is required.');
+            return;
+        }
         let self = this;
-        axios.put('http://localhost:8080/ezScrum/releases/' + this.state.releaseId, {
+        axios.put(Config.back_end_host + Config.ezScrum_api + '/releases/' + this.state.releaseId, {
             name : this.state.name,
             startDate : startDate,
             endDate : endDate,
             description : this.state.description
         }).then(function (response) {
             let editSuccess = response.data.editSuccess;
-            let isReleaseOverlap = response.data.overlap;
             let errorMessage = response.data.errorMessage;
             if(editSuccess === false){
-                if(isReleaseOverlap === true){
-                    alert(errorMessage);
-                }
-                else{
-                    alert(errorMessage);
-                    self.handleClose();
-                    self.props.getAllRelease();
-                }
+                alert(errorMessage);
+                return;
             }else{
                 self.handleClose();
                 self.props.getAllRelease();
@@ -124,6 +110,7 @@ class EditRelease extends React.Component{
             
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 
@@ -145,7 +132,7 @@ class EditRelease extends React.Component{
                                     *Name:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="input" placeholder="input release name..." onInput={this.nameOnChange} defaultValue={this.state.name}/>
+                                    <FormControl componentClass="input" maxLength="50" placeholder="input release name..." onInput={this.nameOnChange} defaultValue={this.state.name}/>
                                 </Col>
                             </FormGroup>
                             <FormGroup>
@@ -171,7 +158,7 @@ class EditRelease extends React.Component{
                                     *Description:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="textarea" placeholder="input description..." onInput={this.descriptionOnChange} defaultValue={this.state.description}/>
+                                    <FormControl componentClass="textarea" maxLength="255" placeholder="input description..." onInput={this.descriptionOnChange} defaultValue={this.state.description}/>
                                 </Col>
                             </FormGroup>
                             <Col componentClass={ControlLabel}>

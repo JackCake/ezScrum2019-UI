@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form, FormControl, FormGroup, Col, ControlLabel } from 'react-bootstrap';
+import Config from '../config.js';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -142,7 +143,7 @@ class EditSprint extends React.Component{
             return;
         }
         let self = this;
-        axios.put('http://localhost:8080/ezScrum/sprints/' + this.state.sprintId, {
+        axios.put(Config.back_end_host + Config.ezScrum_api + '/sprints/' + this.state.sprintId, {
             goal : this.state.goal,
             interval : this.state.interval === '' ? 0 : this.state.interval,
             startDate : startDate,
@@ -152,17 +153,10 @@ class EditSprint extends React.Component{
             daily : this.state.daily
         }).then(function (response) {
             let editSuccess = response.data.editSuccess;
-            let isSprintOverlap = response.data.overlap;
             let errorMessage = response.data.errorMessage;
             if(editSuccess === false){
-                if(isSprintOverlap === true){
-                    alert(errorMessage);
-                }
-                else{
-                    alert(errorMessage);
-                    self.handleClose();
-                    self.props.getAllSprint();
-                }
+                alert(errorMessage);
+                return;
             }else{
                 self.handleClose();
                 self.props.getAllSprint();
@@ -170,6 +164,7 @@ class EditSprint extends React.Component{
             
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 
@@ -191,7 +186,7 @@ class EditSprint extends React.Component{
                                     *Goal:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="textarea" placeholder="input sprint goal..." onInput={this.goalOnChange} defaultValue={this.state.goal}/>
+                                    <FormControl componentClass="textarea" maxLength="255" placeholder="input sprint goal..." onInput={this.goalOnChange} defaultValue={this.state.goal}/>
                                 </Col>
                             </FormGroup>
                             <FormGroup>
@@ -199,7 +194,7 @@ class EditSprint extends React.Component{
                                     *Interval:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="input" type="text" maxLength="2" pattern="[0-9]*" onInput={this.intervalOnChange} defaultValue={this.state.interval} />
+                                    <FormControl componentClass="input" type="text" maxLength="2" pattern="[0-9]*" onChange={this.intervalOnChange} value={this.state.interval} />
                                 </Col>
                             </FormGroup>
                             <FormGroup>
@@ -226,7 +221,7 @@ class EditSprint extends React.Component{
                                     Demo Place:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="input" placeholder="input demo place..." onInput={this.demoPlaceOnChange} defaultValue={this.state.demoPlace}/>
+                                    <FormControl componentClass="input" maxLength="50" placeholder="input demo place..." onInput={this.demoPlaceOnChange} defaultValue={this.state.demoPlace}/>
                                 </Col>
                             </FormGroup>
                             <FormGroup>
@@ -243,7 +238,7 @@ class EditSprint extends React.Component{
                                     Time and Place for Daily Scrum:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="input" placeholder="input daily time and daily place..." onInput={this.dailyOnChange} defaultValue={this.state.daily}/>
+                                    <FormControl componentClass="input" maxLength="50" placeholder="input daily time and daily place..." onInput={this.dailyOnChange} defaultValue={this.state.daily}/>
                                 </Col>
                             </FormGroup>
                             <Col componentClass={ControlLabel}>

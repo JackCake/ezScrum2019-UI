@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Config from '../config.js';
 import SideBar from '../SideBar.js';
 import AddSprint from './AddSprint.js';
 import ViewSprint from './ViewSprint.js';
@@ -21,10 +22,10 @@ class Sprint extends React.Component {
 
   getAllSprint(){
     if(this.props.location.state === undefined){
-      return <Redirect to={"/"}/>
+      return <Redirect to={"/"}/>;
     }
     let self =this;
-    axios.get('http://localhost:8080/ezScrum/products/' + this.props.location.state.selectedProduct.productId + '/sprints')
+    axios.get(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.location.state.selectedProduct.productId + '/sprints')
     .then(function (response) {
         let sprintList = response.data.sprintList;
         let selectedSprint = self.state.selectedSprint;
@@ -32,7 +33,7 @@ class Sprint extends React.Component {
           let selectedSprintList = sprintList.filter(function(sprint){
             return sprint.sprintId === selectedSprint.sprintId;
           });
-          if(selectedSprintList === []){
+          if(selectedSprintList.length === 0){
             self.setState({selectedSprint : undefined});
           }else{
             self.setState({selectedSprint : selectedSprintList[0]});
@@ -42,6 +43,7 @@ class Sprint extends React.Component {
     })
     .catch(function (error){
         console.log(error);
+        window.location.href = Config.front_end_host;
     });
   }
 
@@ -55,7 +57,7 @@ class Sprint extends React.Component {
 
   render() {
     if(this.props.location.state === undefined){
-      return <Redirect to={"/"}/>
+      return <Redirect to={"/"}/>;
     }
     return (
       <div className="SideBar_Div_All">

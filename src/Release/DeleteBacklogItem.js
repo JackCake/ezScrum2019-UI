@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form } from 'react-bootstrap';
+import Config from '../config.js';
 
 class DeleteBacklogItem extends React.Component{
     constructor(props){
@@ -19,10 +20,17 @@ class DeleteBacklogItem extends React.Component{
         if(this.props.selectedScheduledBacklogItem === undefined){
             return;
         }
-        this.setState({
-            show : true,
-            backlogItemId : this.props.selectedScheduledBacklogItem.backlogItemId
-        });
+        let isReleaseOverdue = this.props.isReleaseOverdue;
+        let confirmDelete = true;
+        if(isReleaseOverdue === true){
+            confirmDelete = window.confirm("The release is overdue, are you sure to delete the story?");
+        }
+        if(confirmDelete === true){
+            this.setState({
+                show : true,
+                backlogItemId : this.props.selectedScheduledBacklogItem.backlogItemId
+            });
+        }
     }
 
     handleClose(){
@@ -34,17 +42,19 @@ class DeleteBacklogItem extends React.Component{
 
     submitBacklogItem(){
         let self = this;
-        axios.delete('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/backlog_items/' + this.state.backlogItemId)
+        axios.delete(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.selectedProduct.productId + '/backlog_items/' + this.state.backlogItemId)
         .then(function (response) {
             let deleteSuccess = response.data.deleteSuccess;
             let errorMessage = response.data.errorMessage;
             if(deleteSuccess === false){
                 alert(errorMessage);
+                return;
             }
             self.handleClose();
             self.props.getAllScheduledBacklogItem(self.props.selectedRelease.releaseId);
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 

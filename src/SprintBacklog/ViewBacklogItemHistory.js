@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal } from 'react-bootstrap';
+import Config from '../config.js';
 
 // Import React Table
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
@@ -36,13 +37,14 @@ class ViewBacklogItemHistory extends React.Component{
 
     getBacklogItemHistories(){
         let self =this;
-        axios.get('http://localhost:8080/ezScrum/backlog_items/' + this.props.backlogItem.backlogItemId + '/histories')
+        axios.get(Config.back_end_host + Config.ezScrum_api + '/backlog_items/' + this.props.backlogItem.backlogItemId + '/histories')
         .then(function (response) {
             let backlogItemHistoryList = response.data.backlogItemHistoryList;
             self.setState({backlogItemHistoryList : backlogItemHistoryList});
         })
         .catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 

@@ -58,7 +58,7 @@ INSERT INTO `swim_lane` (`swim_lane_id`, `mini_stage_id`, `title`, `wip_limit`, 
 -- 正在傾印表格  kanban.work_item 的資料：~2 rows (約數)
 /*!40000 ALTER TABLE `work_item` DISABLE KEYS */;
 INSERT INTO `work_item` (`work_item_id`, `swim_lane_id`, `description`, `category_id`, `user_id`, `estimate`, `notes`, `deadline`, `order_id`, `task_ids`) VALUES
-	('ca134a47-9c8c-468a-8987-ff737acd0929', 'c223fa5a-bbb8-4b82-8bc2-ac954291f0f4', 'As a user, I want to add the backlog item in the product backlog.', NULL, '', 3, '', '', 1, ''),
+	('ca134a47-9c8c-468a-8987-ff737acd0929', 'c223fa5a-bbb8-4b82-8bc2-ac954291f0f4', 'As a user, I want to add the backlog item in the product backlog.', NULL, '', 3, 'The notes of the story...', '', 1, ''),
 	('d9b3a374-93cb-4f36-9787-f4ba1faf7777', 'c223fa5a-bbb8-4b82-8bc2-ac954291f0f4', 'As a user, I want to commit the backlog item in the sprint backlog.', NULL, '', 5, '', '', 2, '');
 /*!40000 ALTER TABLE `work_item` ENABLE KEYS */;
 

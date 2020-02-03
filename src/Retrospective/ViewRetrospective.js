@@ -37,6 +37,7 @@ class ViewRetrospective extends React.Component {
 
               <TableHeaderColumn 
                   dataField="retrospectiveDiscussion"
+                  filter={{type: 'TextFilter', delay: 100}}
                   width="90%"
                   dataSort={false}
                   columnTitle

@@ -36,6 +36,7 @@ class ViewRelease extends React.Component {
 
         <TableHeaderColumn 
             dataField="name"
+            filter={{type: 'TextFilter', delay: 100}}
             width="40%"
             dataSort={false}
             columnTitle

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form, FormControl, FormGroup, Col, ControlLabel } from 'react-bootstrap';
+import Config from '../config.js';
 
 class EditRetrospective extends React.Component{
     constructor(props){
@@ -43,18 +44,20 @@ class EditRetrospective extends React.Component{
 
     submitRetrospective(){
         let self = this;
-        axios.put('http://localhost:8080/ezScrum/sprint_retrospectives/' + this.state.sprintId,{
+        axios.put(Config.back_end_host + Config.ezScrum_api + '/sprint_retrospectives/' + this.state.sprintId,{
             retrospective : this.state.retrospectiveDiscussion,
         }).then(function (response) {
             let editSuccess = response.data.editSuccess;
             let errorMessage = response.data.errorMessage;
             if(editSuccess === false){
                 alert(errorMessage);
+                return;
             }
             self.handleClose();
             self.props.getAllRetrospective();
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 
@@ -76,7 +79,7 @@ class EditRetrospective extends React.Component{
                                     *Discussion:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="textarea" placeholder="input retrospective discussion..." onInput={this.retrospectiveDiscussionOnChange} defaultValue={this.state.retrospectiveDiscussion}/>
+                                    <FormControl componentClass="textarea" maxLength="255" placeholder="input retrospective discussion..." onInput={this.retrospectiveDiscussionOnChange} defaultValue={this.state.retrospectiveDiscussion}/>
                                 </Col>
                             </FormGroup>
                             

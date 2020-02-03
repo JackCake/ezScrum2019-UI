@@ -21,7 +21,7 @@ INSERT INTO `event` (`event_id`, `event_body`, `event_type`) VALUES
 -- 正在傾印表格  task_service.task 的資料：~2 rows (約數)
 /*!40000 ALTER TABLE `task` DISABLE KEYS */;
 INSERT INTO `task` (`task_id`, `order_id`, `description`, `handler_id`, `status`, `estimate`, `remains`, `notes`, `backlog_item_id`) VALUES
-	('12bb9bc0-ed9d-46e7-82b7-cc10ca03e195', 1, 'Use Case', NULL, 'To do', 5, 5, '', 'ca134a47-9c8c-468a-8987-ff737acd0929'),
+	('12bb9bc0-ed9d-46e7-82b7-cc10ca03e195', 1, 'Use Case', NULL, 'To do', 5, 5, 'The notes of the task...', 'ca134a47-9c8c-468a-8987-ff737acd0929'),
 	('406bb9d4-33de-4628-9d8a-3f95596201b3', 2, 'Unit Test', NULL, 'To do', 3, 3, '', 'ca134a47-9c8c-468a-8987-ff737acd0929');
 /*!40000 ALTER TABLE `task` ENABLE KEYS */;
 

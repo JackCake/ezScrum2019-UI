@@ -6,9 +6,9 @@ class DatabaseHandler:
     def __init__(self):
         pass
 
-    def load_database(self, host_url, databaseName, account, password, path):
+    def load_database(self, hostUrl, databaseName, account, password, path):
         #db = MySQLdb.connect(host="127.0.0.1", user="root", passwd="1234", db="ezscrum")
-        db = MySQLdb.connect( host_url, account, password, databaseName)
+        db = MySQLdb.connect( hostUrl, account, password, databaseName)
         # Open and read the file as a single buffer
         fd = open(path , 'r')
         sqlFile = fd.read()
@@ -16,7 +16,7 @@ class DatabaseHandler:
 
         # all SQL commands (split on ';')
         sqlCommands = sqlFile.split(';')
-        db = MySQLdb.connect(host=host_url, user=account, passwd=password, db=databaseName, charset='utf8')
+        db = MySQLdb.connect(host=hostUrl, user=account, passwd=password, db=databaseName, charset='utf8')
         cursor = db.cursor()
 
         # ignore useless warnings
@@ -35,7 +35,7 @@ class DatabaseHandler:
                 print "Command warning: " + command
 
 
-    def Clean_Database(self, hostUrl, account, password, databaseName):
+    def clean_database(self, hostUrl, account, password, databaseName):
         print 'clean database ' + databaseName
         db = MySQLdb.connect(host=hostUrl, user=account, passwd=password, db=databaseName)
         cursor = db.cursor()

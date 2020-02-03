@@ -37,6 +37,7 @@ class ViewProduct extends React.Component {
 
         <TableHeaderColumn 
             dataField="name"
+            filter={{type: 'TextFilter', delay: 100}}
             width="95%"
             dataSort={false}
             columnTitle

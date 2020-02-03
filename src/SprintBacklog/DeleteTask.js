@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form } from 'react-bootstrap';
+import Config from '../config.js';
 
 class DeleteTask extends React.Component{
     constructor(props){
@@ -38,17 +39,19 @@ class DeleteTask extends React.Component{
 
     submitTask(){
         let self = this;
-        axios.delete('http://localhost:8080/ezScrum/tasks/' + this.state.taskId)
+        axios.delete(Config.back_end_host + Config.ezScrum_api + '/tasks/' + this.state.taskId)
         .then(function (response) {
             let deleteSuccess = response.data.deleteSuccess;
             let errorMessage = response.data.errorMessage;
             if(deleteSuccess === false){
                 alert(errorMessage);
+                return;
             }
             self.handleClose();
             self.props.getAllCommittedBacklogItem(self.props.selectedSprintId);
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form, FormControl, FormGroup, Col, ControlLabel } from 'react-bootstrap';
+import Config from '../config.js';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -57,30 +58,22 @@ class AddRelease extends React.Component{
             alert('The name is required.');
             return;
         }
-        if(this.state.startDate === ''){
-            alert('The startDate is required.');
+        let startDate = moment(this.state.startDate).format('YYYY-MM-DD');
+        let endDate = moment(this.state.endDate).format('YYYY-MM-DD');
+        if(this.state.startDate === undefined || moment(startDate, 'YYYY-MM-DD', true).isValid() === false){
+            alert('The format of the start date is not correct.');
             return;
         }
-        if(this.state.endDate === ''){
-            alert('The endDate is required.');
+        if(this.state.endDate === undefined || moment(endDate, 'YYYY-MM-DD', true).isValid() === false){
+            alert('The format of the end date is not correct.');
             return;
         }
         if(this.state.description === ''){
             alert('The description is required.');
             return;
         }
-        let startDate = moment(this.state.startDate).format('YYYY-MM-DD');
-        let endDate = moment(this.state.endDate).format('YYYY-MM-DD');
-        if(moment(startDate, 'YYYY-MM-DD', true).isValid() === false){
-            alert('The format of the start date is not correct.');
-            return;
-        }
-        if(moment(endDate, 'YYYY-MM-DD', true).isValid() === false){
-            alert('The format of the end date is not correct.');
-            return;
-        }
         let self = this;
-        axios.post('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/releases',{
+        axios.post(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.selectedProduct.productId + '/releases',{
             name : self.state.name,
             startDate : startDate,
             endDate : endDate,
@@ -90,12 +83,14 @@ class AddRelease extends React.Component{
             let errorMessage = response.data.errorMessage;
             if(addSuccess === false){
                 alert(errorMessage);
+                return;
             }else{
                 self.handleClose();
                 self.props.getAllRelease();
             }
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 
@@ -117,7 +112,7 @@ class AddRelease extends React.Component{
                                     *Name:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="input" placeholder="input release name..." onInput={this.nameOnChange}/>
+                                    <FormControl componentClass="input" maxLength="50" placeholder="input release name..." onInput={this.nameOnChange}/>
                                 </Col>
                             </FormGroup>
                             <FormGroup>
@@ -144,7 +139,7 @@ class AddRelease extends React.Component{
                                     *Description:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="textarea" placeholder="input description..." onInput={this.descriptionOnChange}/>
+                                    <FormControl componentClass="textarea" maxLength="255" placeholder="input description..." onInput={this.descriptionOnChange}/>
                                 </Col>
                             </FormGroup>
                             <Col componentClass={ControlLabel}>

@@ -36,6 +36,7 @@ class ViewSprint extends React.Component {
 
         <TableHeaderColumn 
             dataField="goal"
+            filter={{type: 'TextFilter', delay: 100}}
             width="40%"
             dataSort={false}
             columnTitle

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form } from 'react-bootstrap';
+import Config from '../config.js';
 
 class UnscheduleBacklogItem extends React.Component{
     constructor(props){
@@ -41,17 +42,19 @@ class UnscheduleBacklogItem extends React.Component{
 
     submitBacklogItem(){
         let self = this;
-        axios.delete('http://localhost:8080/ezScrum/releases/' + this.props.selectedRelease.releaseId + '/scheduled_backlog_items/' + this.state.backlogItemId)
+        axios.delete(Config.back_end_host + Config.ezScrum_api + '/releases/' + this.props.selectedRelease.releaseId + '/scheduled_backlog_items/' + this.state.backlogItemId)
         .then(function (response) {
             let unscheduleSuccess = response.data.unscheduleSuccess;
             let errorMessage = response.data.errorMessage;
             if(unscheduleSuccess === false){
                 alert(errorMessage);
+                return;
             }
             self.handleClose();
             self.props.getAllScheduledBacklogItem(self.props.selectedRelease.releaseId);
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 

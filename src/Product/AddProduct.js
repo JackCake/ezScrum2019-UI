@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form, FormControl, FormGroup, Col, ControlLabel } from 'react-bootstrap';
+import Config from '../config.js';
 
 class AddProduct extends React.Component{
     constructor(props){
@@ -37,8 +38,12 @@ class AddProduct extends React.Component{
             alert('The name is required.');
             return;
         }
+        if(this.props.productData.some(product => product.name === this.state.name)){
+            alert('There is the same name of the product.');
+            return;
+        }
         let self = this;
-        axios.post('http://localhost:8080/ezScrum/products',{
+        axios.post(Config.back_end_host + Config.ezScrum_api + '/products',{
             name : this.state.name, 
             userId : '1'
         }).then(function (response) {
@@ -46,12 +51,14 @@ class AddProduct extends React.Component{
             let errorMessage = response.data.errorMessage;
             if(addSuccess === false){
                 alert(errorMessage);
+                return;
             }else{
                 self.handleClose();
                 self.props.getProductsByUserId();
             }
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 
@@ -73,7 +80,7 @@ class AddProduct extends React.Component{
                                     *Name:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="textarea" placeholder="input product name..." onInput={this.nameOnChange}/>
+                                    <FormControl componentClass="input" type="text" maxLength="50" placeholder="input product name..." onInput={this.nameOnChange}/>
                                 </Col>
                             </FormGroup>
                             <Col componentClass={ControlLabel}>

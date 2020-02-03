@@ -29,6 +29,7 @@ class ViewTag extends React.Component {
 
         <TableHeaderColumn 
             dataField="orderId"
+            editable={false}
             width="10%"
             dataSort={true}
             columnTitle
@@ -38,7 +39,8 @@ class ViewTag extends React.Component {
 
         <TableHeaderColumn 
             dataField="name"
-            customEditor={{ getElement: (onUpdate, props) => (<EditTag getAllTag={this.props.getAllTag} onUpdate={onUpdate} {...props}/>)}}
+            filter={{type: 'TextFilter', delay: 100}}
+            customEditor={{ getElement: (onUpdate, props) => (<EditTag getAllTag={this.props.getAllTag} tagData={this.props.tagData} onUpdate={onUpdate} {...props}/>)}}
             width="90%"
             dataSort={false}
             columnTitle

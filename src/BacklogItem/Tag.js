@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import { Button, Modal, Row } from 'react-bootstrap';
+import { Button, Modal, Row, ControlLabel } from 'react-bootstrap';
+import Config from '../config.js';
 import AddTag from './AddTag.js';
 import DeleteTag from './DeleteTag.js'
 import ViewTag from './ViewTag.js';
@@ -23,13 +24,25 @@ class Tag extends React.Component{
 
     getAllTag(){
         let self =this;
-        axios.get('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/tags')
+        axios.get(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.selectedProduct.productId + '/tags')
         .then(function (response) {
             let tagList = response.data.tagList;
+            let selectedTag = self.state.selectedTag;
+            if(selectedTag !== undefined){
+                let selectedTagList = tagList.filter(function(tag){
+                    return tag.tagId === selectedTag.tagId;
+                });
+                if(selectedTagList.length === 0){
+                    self.setState({selectedTag : undefined});
+                }else{
+                    self.setState({selectedTag : selectedTagList[0]});
+                }
+            }
             self.setState({tagData : tagList});
         })
         .catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 
@@ -57,7 +70,7 @@ class Tag extends React.Component{
         return (
             <div>
                 <Button className="Function_Button" bsStyle="link" bsSize="small" onClick={this.handleShow}>
-                    <img src="../add.png" alt="Manage Tag"/>Manage Tag
+                    <img src="../magic-wand.png" alt="Manage Tag"/>Manage Tag
                 </Button>
 
                 <Modal show={this.state.show} onHide={this.handleClose}>
@@ -67,6 +80,9 @@ class Tag extends React.Component{
                     <Modal.Body>
                         <Row>
                             <AddTag getAllTag={this.getAllTag} tagData={this.state.tagData} selectedProduct={this.props.selectedProduct}/>
+                        </Row>
+                        <Row componentClass={ControlLabel}>
+                            (Hint: click the name of the tag in the table to edit)
                         </Row>
                         <Row>
                             <DeleteTag getAllTag={this.getAllTag} selectedTag={this.state.selectedTag}/>

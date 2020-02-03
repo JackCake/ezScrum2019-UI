@@ -37,6 +37,7 @@ class ViewScheduledBacklogItem extends React.Component {
 
         <TableHeaderColumn 
             dataField="tagList"
+            filter={{type: 'TextFilter', delay: 100}}
             width="10%"
             dataSort={false}
             columnTitle
@@ -46,6 +47,7 @@ class ViewScheduledBacklogItem extends React.Component {
 
         <TableHeaderColumn 
             dataField="description"
+            filter={{type: 'TextFilter', delay: 100}}
             width="30%"
             dataSort={false}
             columnTitle

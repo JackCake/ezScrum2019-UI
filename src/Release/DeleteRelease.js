@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form } from 'react-bootstrap';
+import Config from '../config.js';
 
 class DeleteRelease extends React.Component{
     constructor(props){
@@ -41,18 +42,20 @@ class DeleteRelease extends React.Component{
 
     submitRelease(){
         let self = this;
-        axios.delete('http://localhost:8080/ezScrum/releases/' + this.state.releaseId)
+        axios.delete(Config.back_end_host + Config.ezScrum_api + '/releases/' + this.state.releaseId)
         .then(function (response) {
             let deleteSuccess = response.data.deleteSuccess;
             let errorMessage = response.data.errorMessage;
             if(deleteSuccess === false){
                 alert(errorMessage);
+                return;
             }
             self.handleClose();
             self.props.getAllRelease();
             self.props.clearAllScheduledBacklogItemAfterDeleteRelease();
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 

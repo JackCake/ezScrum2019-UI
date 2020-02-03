@@ -5,6 +5,7 @@ import EditProduct from './EditProduct.js';
 import ViewProduct from './ViewProduct.js';
 import DeleteProduct from './DeleteProduct';
 import { Button } from 'react-bootstrap';
+import Config from '../config.js';
 import { Redirect } from 'react-router-dom';
 
 class Product extends React.Component {
@@ -22,7 +23,7 @@ class Product extends React.Component {
 
   getProductsByUserId(){
     let self =this;
-    axios.get('http://localhost:8080/ezScrum/products')
+    axios.get(Config.back_end_host + Config.ezScrum_api + '/products')
     .then(function (response) {
       let productList = response.data.productList;
 
@@ -31,7 +32,7 @@ class Product extends React.Component {
           let selectedProductList = productList.filter(function(product){
             return product.productId === selectedProduct.productId;
           });
-          if(selectedProductList === []){
+          if(selectedProductList.length === 0){
             self.setState({selectedProduct : undefined});
           }else{
             self.setState({selectedProduct : selectedProductList[0]});
@@ -68,8 +69,8 @@ class Product extends React.Component {
     return (
       <div>
         <div style = {{display : 'flex'}}>
-          <AddProduct getProductsByUserId={this.getProductsByUserId}/>
-          <EditProduct getProductsByUserId={this.getProductsByUserId} selectedProduct={this.state.selectedProduct}/>
+          <AddProduct getProductsByUserId={this.getProductsByUserId} productData={this.state.productData}/>
+          <EditProduct getProductsByUserId={this.getProductsByUserId} productData={this.state.productData} selectedProduct={this.state.selectedProduct}/>
           <DeleteProduct getProductsByUserId={this.getProductsByUserId} selectedProduct={this.state.selectedProduct}/>
           <Button className="Function_Button" bsStyle="link" bsSize="small" onClick={this.goIntoProduct}>Go Into Product</Button>
         </div>

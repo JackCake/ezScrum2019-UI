@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Config from '../config.js';
 import SideBar from '../SideBar.js';
 import AddRelease from './AddRelease.js';
 import EditRelease from './EditRelease.js';
@@ -35,10 +36,10 @@ class Release extends React.Component {
 
   getAllRelease(){
     if(this.props.location.state === undefined){
-      return <Redirect to={"/"}/>
+      return <Redirect to={"/"}/>;
     }
     let self =this;
-    axios.get('http://localhost:8080/ezScrum/products/' + this.props.location.state.selectedProduct.productId + '/releases')
+    axios.get(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.location.state.selectedProduct.productId + '/releases')
     .then(function (response) {
         let releaseList = response.data.releaseList;
         let selectedRelease = self.state.selectedRelease;
@@ -46,22 +47,26 @@ class Release extends React.Component {
           let selectedReleaseList = releaseList.filter(function(release){
             return release.releaseId === selectedRelease.releaseId;
           });
-          if(selectedReleaseList === []){
+          if(selectedReleaseList.length === 0){
             self.setState({selectedRelease : undefined});
           }else{
-            self.setState({selectedRelease : selectedReleaseList[0]});
+            self.setState({
+              selectedRelease : selectedReleaseList[0], 
+              isReleaseOverdue : selectedReleaseList[0].releaseOverdue
+            });
           }
         }
         self.setState({releaseData : releaseList});
     })
     .catch(function (error){
         console.log(error);
+        window.location.href = Config.front_end_host;
     });
   }
 
   getAllScheduledBacklogItem(selectedReleaseId){
     let self = this;
-    axios.get('http://localhost:8080/ezScrum/products/' + this.props.location.state.selectedProduct.productId + '/releases/' + selectedReleaseId + '/scheduled_backlog_items')
+    axios.get(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.location.state.selectedProduct.productId + '/releases/' + selectedReleaseId + '/scheduled_backlog_items')
     .then(function (response) {
         let scheduledBacklogItemList = response.data.scheduledBacklogItemList;
         for(var i = 0; i < scheduledBacklogItemList.length; i++){
@@ -77,7 +82,7 @@ class Release extends React.Component {
           let selectedScheduledBacklogItemList = scheduledBacklogItemList.filter(function(scheduleBacklogItem){
             return scheduleBacklogItem.backlogItemId === selectedScheduledBacklogItem.backlogItemId;
           });
-          if(selectedScheduledBacklogItemList === []){
+          if(selectedScheduledBacklogItemList.length === 0){
             self.setState({scheduleBacklogItem : undefined});
           }else{
             self.setState({scheduleBacklogItem : selectedScheduledBacklogItemList[0]});
@@ -87,6 +92,7 @@ class Release extends React.Component {
     })
     .catch(function (error){
         console.log(error);
+        window.location.href = Config.front_end_host;
     });
   }
 
@@ -114,12 +120,15 @@ class Release extends React.Component {
   }
 
   clearAllScheduledBacklogItemAfterDeleteRelease(){
-    this.setState({scheduledBacklogItemData: []});
+    this.setState({
+      scheduledBacklogItemData: [], 
+      selectedScheduledBacklogItem: undefined
+    });
   }
 
   render() {
     if(this.props.location.state === undefined){
-      return <Redirect to={"/"}/>
+      return <Redirect to={"/"}/>;
     }
     return (
       <div className="SideBar_Div_All">
@@ -135,12 +144,12 @@ class Release extends React.Component {
               <AddBacklogItem getAllScheduledBacklogItem={this.getAllScheduledBacklogItem} selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct} disabled={this.state.isReleaseOverdue}/>
               <ScheduleBacklogItem getAllScheduledBacklogItem={this.getAllScheduledBacklogItem} selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct} disabled={this.state.isReleaseOverdue}/>
               <ShowReleaseInformation selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct}/>
-              <PrintScheduledBacklogItem selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct}/>
+              <PrintScheduledBacklogItem scheduledBacklogItemData={this.state.scheduledBacklogItemData} selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct}/>
             </div>
             <ViewRelease releaseData={this.state.releaseData} handleReleaseRowSelect={this.handleReleaseRowSelect}/>
             <div style = {{display : 'flex'}}>
-              <EditBacklogItem getAllScheduledBacklogItem={this.getAllScheduledBacklogItem} selectedScheduledBacklogItem={this.state.selectedScheduledBacklogItem} selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct}/>
-              <DeleteBacklogItem getAllScheduledBacklogItem={this.getAllScheduledBacklogItem} selectedScheduledBacklogItem={this.state.selectedScheduledBacklogItem} selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct}/>
+              <EditBacklogItem getAllScheduledBacklogItem={this.getAllScheduledBacklogItem} selectedScheduledBacklogItem={this.state.selectedScheduledBacklogItem} selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct} isReleaseOverdue={this.state.isReleaseOverdue}/>
+              <DeleteBacklogItem getAllScheduledBacklogItem={this.getAllScheduledBacklogItem} selectedScheduledBacklogItem={this.state.selectedScheduledBacklogItem} selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct} isReleaseOverdue={this.state.isReleaseOverdue}/>
               <UnscheduleBacklogItem getAllScheduledBacklogItem={this.getAllScheduledBacklogItem} selectedScheduledBacklogItem={this.state.selectedScheduledBacklogItem} 
               selectedRelease={this.state.selectedRelease} selectedProduct={this.props.location.state.selectedProduct} isReleaseOverdue={this.state.isReleaseOverdue}/>
             </div>

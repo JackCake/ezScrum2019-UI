@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Form, FormControl, FormGroup, Col, ControlLabel } from 'react-bootstrap';
+import Config from '../config.js';
 
 class AddTag extends React.Component{
     constructor(props){
@@ -24,23 +25,25 @@ class AddTag extends React.Component{
             return;
         }
         if(this.props.tagData.some(tag => tag.name === this.state.name)){
-            alert('There is the same name of the tag in the table.');
+            alert('There is the same name of the tag.');
             return;
         }
         let self = this;
-        axios.post('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/tags',{
+        axios.post(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.selectedProduct.productId + '/tags',{
             name : this.state.name
         }).then(function (response) {
             let addSuccess = response.data.addSuccess;
             let errorMessage = response.data.errorMessage;
             if(addSuccess === false){
                 alert(errorMessage);
+                return;
             }else{
                 self.props.getAllTag();
                 self.setState({name : ''});
             }
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 
@@ -59,6 +62,9 @@ class AddTag extends React.Component{
                             <Button onClick={this.submitTag}>Submit</Button>
                         </Col>
                     </FormGroup>
+                    <Col componentClass={ControlLabel}>
+                        (Note: * denotes a required field)
+                    </Col>
                 </Form>
             </div>
         );

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form } from 'react-bootstrap';
+import Config from '../config.js';
 
 class DropBacklogItem extends React.Component{
     constructor(props){
@@ -38,17 +39,19 @@ class DropBacklogItem extends React.Component{
 
     submitBacklogItem(){
         let self = this;
-        axios.delete('http://localhost:8080/ezScrum/sprints/' + this.props.selectedSprintId + '/committed_backlog_items/' + this.state.backlogItemId)
+        axios.delete(Config.back_end_host + Config.ezScrum_api + '/sprints/' + this.props.selectedSprintId + '/committed_backlog_items/' + this.state.backlogItemId)
         .then(function (response) {
             let dropSuccess = response.data.dropSuccess;
             let errorMessage = response.data.errorMessage;
             if(dropSuccess === false){
                 alert(errorMessage);
+                return;
             }
             self.handleClose();
             self.props.getAllCommittedBacklogItem(self.props.selectedSprintId);
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 

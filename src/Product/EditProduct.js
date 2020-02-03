@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form, FormControl, FormGroup, Col, ControlLabel } from 'react-bootstrap';
+import Config from '../config.js';
 
 class EditProduct extends React.Component{
     constructor(props){
@@ -46,8 +47,12 @@ class EditProduct extends React.Component{
             alert('The name is required.');
             return;
         }
+        if(this.props.productData.some(product => product.productId !== this.state.productId && product.name === this.state.name)){
+            alert('There is the same name of the product.');
+            return;
+        }
         let self = this;
-        axios.put('http://localhost:8080/ezScrum/products/' + this.state.productId, {
+        axios.put(Config.back_end_host + Config.ezScrum_api + '/products/' + this.state.productId, {
             name : this.state.name, 
             userId : '1'
         }).then(function (response) {
@@ -55,11 +60,13 @@ class EditProduct extends React.Component{
             let errorMessage = response.data.errorMessage;
             if(editSuccess === false){
                 alert(errorMessage);
+                return;
             }
             self.handleClose();
             self.props.getProductsByUserId()
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
         
     }
@@ -81,7 +88,7 @@ class EditProduct extends React.Component{
                                     *Name:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="textarea" type="text" placeholder="input product name..." onInput={this.nameOnChange} defaultValue={this.state.name}/>
+                                    <FormControl componentClass="input" type="text" maxLength="50" placeholder="input product name..." onInput={this.nameOnChange} defaultValue={this.state.name}/>
                                 </Col>
                             </FormGroup>
                             <Col componentClass={ControlLabel}>

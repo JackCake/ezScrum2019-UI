@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal } from 'react-bootstrap';
+import Config from '../config.js';
 
 // Import React Table
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
@@ -60,34 +61,38 @@ class CommitBacklogItem extends React.Component{
 
       getAllNotYetCommittedBacklogItem(){
         let self =this;
-        axios.get('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/not_yet_committed_backlog_items')
+        axios.get(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.selectedProduct.productId + '/not_yet_committed_backlog_items')
         .then(function (response) {
             let notYetCommittedBacklogItemList = response.data.notYetCommittedBacklogItemList;
             self.setState({data : notYetCommittedBacklogItemList});
         })
         .catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 
     submitCommittedBacklogItem(){
-        if(this.state.selectedBacklogItemIds === []){
+        if(this.state.selectedBacklogItemIds.length === 0){
             alert("Please choose backlog item.");
+            return;
         }
         let self = this;
-        axios.post('http://localhost:8080/ezScrum/sprints/' + this.props.selectedSprintId + '/committed_backlog_items',{
+        axios.post(Config.back_end_host + Config.ezScrum_api + '/sprints/' + this.props.selectedSprintId + '/committed_backlog_items',{
             backlogItemIds : this.state.selectedBacklogItemIds
             }).then(function (response) {
                 let commitSuccess = response.data.commitSuccess;
                 let errorMessage = response.data.errorMessage;
                 if(commitSuccess === false){
                     alert(errorMessage);
+                    return;
                 }
                 self.handleClose();
                 self.props.getAllCommittedBacklogItem(self.props.selectedSprintId);
                 self.getAllNotYetCommittedBacklogItem();
             }).catch(function (error){
                 console.log(error);
+                window.location.href = Config.front_end_host;
             });
     }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form, FormControl, FormGroup, Col, ControlLabel } from 'react-bootstrap';
+import Config from '../config.js';
 
 class EditTask extends React.Component{
     constructor(props){
@@ -86,7 +87,7 @@ class EditTask extends React.Component{
             remains = this.state.remains;
         }
         let self = this;
-        axios.put('http://localhost:8080/ezScrum/tasks/' + this.state.taskId, {
+        axios.put(Config.back_end_host + Config.ezScrum_api + '/tasks/' + this.state.taskId, {
             description : this.state.description,
             estimate : estimate,
             remains : remains,
@@ -96,11 +97,13 @@ class EditTask extends React.Component{
             let errorMessage = response.data.errorMessage;
             if(editSuccess === false){
                 alert(errorMessage);
+                return;
             }
             self.handleClose();
             self.props.getAllCommittedBacklogItem(self.props.selectedSprintId);
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 
@@ -122,7 +125,7 @@ class EditTask extends React.Component{
                                     *Description:
                                 </Col>
                                 <Col sm={10}>
-                                    <FormControl componentClass="textarea" placeholder="input task description..." onInput={this.descriptionOnChange} defaultValue={this.state.description}/>
+                                    <FormControl componentClass="textarea" maxLength="255" placeholder="input task description..." onInput={this.descriptionOnChange} defaultValue={this.state.description}/>
                                 </Col>
                             </FormGroup>
                             <FormGroup>

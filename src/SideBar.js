@@ -6,7 +6,7 @@ import './Button.css';
 class SideBar extends Component{
     render(){
         if(this.props.selectedProduct===undefined){
-            return <Redirect to={"/"}/>
+            return <Redirect to={"/"}/>;
         }
         return(
             <div>

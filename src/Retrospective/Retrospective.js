@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Config from '../config.js';
 
 import SideBar from '../SideBar.js';
 
@@ -22,10 +23,10 @@ class Retrospective extends React.Component {
 
   getAllRetrospective(){
     if(this.props.location.state === undefined){
-      return <Redirect to={"/"}/>
+      return <Redirect to={"/"}/>;
     }
     let self =this;
-    axios.get('http://localhost:8080/ezScrum/products/' + this.props.location.state.selectedProduct.productId + '/retrospectives')
+    axios.get(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.location.state.selectedProduct.productId + '/retrospectives')
     .then(function (response) {
         let retrospectiveList = response.data.retrospectiveList;
         for(var i=0; i<retrospectiveList.length; i++){
@@ -38,7 +39,7 @@ class Retrospective extends React.Component {
           let selectedRetrospectiveList = retrospectiveList.filter(function(retrospective){
             return retrospective.retrospectiveId === selectedRetrospective.retrospectiveId;
           });
-          if(selectedRetrospectiveList === []){
+          if(selectedRetrospectiveList.length === 0){
             self.setState({selectedRetrospective : undefined});
           }else{
             self.setState({selectedRetrospective : selectedRetrospectiveList[0]});
@@ -48,6 +49,7 @@ class Retrospective extends React.Component {
     })
     .catch(function (error){
         console.log(error);
+        window.location.href = Config.front_end_host;
     });
   }
 
@@ -61,7 +63,7 @@ class Retrospective extends React.Component {
 
   render() {
     if(this.props.location.state === undefined){
-      return <Redirect to={"/"}/>
+      return <Redirect to={"/"}/>;
     }
     return (
       <div className="SideBar_Div_All">

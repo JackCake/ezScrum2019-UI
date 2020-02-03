@@ -3,6 +3,8 @@ import '../TaskBoard.css';
 import EditTask from './EditTask.js';
 import DeleteTask from './DeleteTask.js';
 import ViewTaskHistory from "./ViewTaskHistory.js";
+import UploadTaskAttachFile from "./UploadTaskAttachFile.js";
+import ViewTaskAttachFile from "./ViewTaskAttachFile.js";
 
 class TaskCard extends React.Component {
     render(){
@@ -23,6 +25,8 @@ class TaskCard extends React.Component {
                                                 getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId} isSprintOverdue={this.props.isSprintOverdue}/>
                                                 <DeleteTask task={this.props.task} getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId} isSprintOverdue={this.props.isSprintOverdue}/>
                                                 <ViewTaskHistory task={this.props.task}/>
+                                                <UploadTaskAttachFile task={this.props.task}
+                                                getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId}/>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -38,6 +42,8 @@ class TaskCard extends React.Component {
                             </td>
                         </tr>
                     </tbody>
+                    <ViewTaskAttachFile attachFiles={this.props.task.attachFileList}
+                    getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId}/>
                 </table>
              </div>
         );

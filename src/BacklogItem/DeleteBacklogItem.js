@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form } from 'react-bootstrap';
+import Config from '../config.js';
 
 class DeleteBacklogItem extends React.Component{
     constructor(props){
@@ -34,7 +35,7 @@ class DeleteBacklogItem extends React.Component{
 
     submitBacklogItem(){
         let self = this;
-        axios.delete('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/backlog_items/' + this.state.backlogItemId)
+        axios.delete(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.selectedProduct.productId + '/backlog_items/' + this.state.backlogItemId)
         .then(function (response) {
             let deleteSuccess = response.data.deleteSuccess;
             let errorMessage = response.data.errorMessage;
@@ -46,6 +47,7 @@ class DeleteBacklogItem extends React.Component{
             self.props.getAllBacklogItem();
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 

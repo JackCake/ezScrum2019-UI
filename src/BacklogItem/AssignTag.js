@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Col, ControlLabel } from 'react-bootstrap';
+import Config from '../config.js';
 import ViewAssignedTag from './ViewAssignedTag';
 
 // Import React Table
@@ -36,13 +37,14 @@ class AssignTag extends React.Component{
 
     getAllTag(){
         let self =this;
-        axios.get('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/tags')
+        axios.get(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.selectedProduct.productId + '/tags')
         .then(function (response) {
             let tagList = response.data.tagList;
             self.setState({tagData : tagList});
         })
         .catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 

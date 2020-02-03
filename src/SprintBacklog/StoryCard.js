@@ -5,9 +5,9 @@ import EditBacklogItem from "./EditBacklogItem.js";
 import DeleteBacklogItem from "./DeleteBacklogItem.js";
 import DropBacklogItem from "./DropBacklogItem.js";
 import ViewBacklogItemHistory from './ViewBacklogItemHistory.js';
-import UploadAttachFile from "./UploadAttachFile";
-import ViewAssignedTag from "../BacklogItem/ViewAssignedTag";
-import ViewAttachFile from "./ViewAttachFile";
+import UploadBacklogItemAttachFile from "./UploadBacklogItemAttachFile.js";
+import ViewAssignedTag from "../BacklogItem/ViewAssignedTag.js";
+import ViewBacklogItemAttachFile from "./ViewBacklogItemAttachFile.js";
 
 class StoryCard extends React.Component {
     
@@ -34,7 +34,7 @@ class StoryCard extends React.Component {
                                                 <DropBacklogItem backlogItem={this.props.backlogItem}
                                                 getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId} selectedProduct={this.props.selectedProduct} isSprintOverdue={this.props.isSprintOverdue}/>
                                                 <ViewBacklogItemHistory backlogItem={this.props.backlogItem}/>
-                                                <UploadAttachFile cardType={"Backlog Item"} id={this.props.backlogItem.backlogItemId} 
+                                                <UploadBacklogItemAttachFile backlogItem={this.props.backlogItem}
                                                 getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId}/>
                                             </td>
                                         </tr>
@@ -56,7 +56,7 @@ class StoryCard extends React.Component {
                             </td>
                         </tr>
                     </tbody>
-                    <ViewAttachFile attachFileType={"Backlog Item"} attachFiles={this.props.backlogItem.attachFileList}
+                    <ViewBacklogItemAttachFile attachFiles={this.props.backlogItem.attachFileList}
                     getAllCommittedBacklogItem={this.props.getAllCommittedBacklogItem} selectedSprintId={this.props.selectedSprintId}/>
                 </table>
              </div>

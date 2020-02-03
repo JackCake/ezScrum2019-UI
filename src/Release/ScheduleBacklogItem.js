@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal } from 'react-bootstrap';
+import Config from '../config.js';
 
 // Import React Table
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
@@ -60,34 +61,38 @@ class ScheduleBacklogItem extends React.Component{
 
       getAllNotYetScheduledBacklogItem(){
         let self =this;
-        axios.get('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/not_yet_scheduled_backlog_items')
+        axios.get(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.selectedProduct.productId + '/not_yet_scheduled_backlog_items')
         .then(function (response) {
             let notYetScheduledBacklogItemList = response.data.notYetScheduledBacklogItemList;
             self.setState({data : notYetScheduledBacklogItemList});
         })
         .catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 
     submitScheduledBacklogItem(){
-        if(this.state.selectedBacklogItemIds === []){
+        if(this.state.selectedBacklogItemIds.length === 0){
             alert("Please choose backlog item.");
+            return;
         }
         let self = this;
-        axios.post('http://localhost:8080/ezScrum/releases/' + this.props.selectedRelease.releaseId + '/scheduled_backlog_items',{
+        axios.post(Config.back_end_host + Config.ezScrum_api + '/releases/' + this.props.selectedRelease.releaseId + '/scheduled_backlog_items',{
             backlogItemIds : this.state.selectedBacklogItemIds
             }).then(function (response) {
                 let scheduleSuccess = response.data.scheduleSuccess;
                 let errorMessage = response.data.errorMessage;
                 if(scheduleSuccess === false){
                     alert(errorMessage);
+                    return;
                 }
                 self.handleClose();
                 self.props.getAllScheduledBacklogItem(self.props.selectedRelease.releaseId);
                 self.getAllNotYetScheduledBacklogItem();
             }).catch(function (error){
                 console.log(error);
+                window.location.href = Config.front_end_host;
             });
     }
 

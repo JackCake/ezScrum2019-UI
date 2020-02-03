@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal, Form } from 'react-bootstrap';
+import Config from '../config.js';
 
 class DeleteSprint extends React.Component{
     constructor(props){
@@ -22,7 +23,7 @@ class DeleteSprint extends React.Component{
         let isSprintOverdue = this.props.selectedSprint.sprintOverdue;
         let confirmDelete = true;
         if(isSprintOverdue === true){
-            confirmDelete = window.confirm("The sprint is overdue, are you sure to delte it?");
+            confirmDelete = window.confirm("The sprint is overdue, are you sure to delete it?");
         }
         if(confirmDelete === true){
             this.setState({
@@ -41,17 +42,19 @@ class DeleteSprint extends React.Component{
 
     submitSprint(){
         let self = this;
-        axios.delete('http://localhost:8080/ezScrum/sprints/' + this.state.sprintId)
+        axios.delete(Config.back_end_host + Config.ezScrum_api + '/sprints/' + this.state.sprintId)
         .then(function (response) {
             let deleteSuccess = response.data.deleteSuccess;
             let errorMessage = response.data.errorMessage;
             if(deleteSuccess === false){
                 alert(errorMessage);
+                return;
             }
             self.handleClose();
             self.props.getAllSprint();
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 

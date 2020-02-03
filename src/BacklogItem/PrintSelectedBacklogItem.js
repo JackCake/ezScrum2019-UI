@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
+import Config from '../config.js';
 
 class PrintSelectedBacklogItem extends React.Component{
     constructor(props){
@@ -13,7 +14,7 @@ class PrintSelectedBacklogItem extends React.Component{
         if(this.props.selectedBacklogItem === undefined){
             return;
         }
-        axios('http://localhost:8080/ezScrum/products/' + this.props.selectedProduct.productId + '/printable_backlog_items/' + this.props.selectedBacklogItem.backlogItemId + '/pdf', {
+        axios(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.selectedProduct.productId + '/printable_backlog_items/' + this.props.selectedBacklogItem.backlogItemId + '/pdf', {
             method: 'GET',
             responseType: 'blob'
         })
@@ -28,6 +29,7 @@ class PrintSelectedBacklogItem extends React.Component{
             };
         }).catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 
@@ -35,7 +37,7 @@ class PrintSelectedBacklogItem extends React.Component{
         return (
             <div>
                 <Button className="Function_Button" bsStyle="link" bsSize="small" onClick={this.submit}>
-                    <img src="../delete.png" alt="Print Selected Backlog Item"/>Print Selected Backlog Item
+                    <img src="../text.png" alt="Print Selected Backlog Item"/>Print Selected Backlog Item
                 </Button>
             </div>
         );

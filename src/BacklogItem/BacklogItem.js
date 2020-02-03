@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Config from '../config.js';
 import SideBar from '../SideBar.js';
 import AddBacklogItem from './AddBacklogItem.js';
 import EditBacklogItem from './EditBacklogItem.js';
@@ -23,10 +24,10 @@ class BacklogItem extends React.Component {
 
   getAllBacklogItem(){
     if(this.props.location.state === undefined){
-      return <Redirect to={"/"}/>
+      return <Redirect to={"/"}/>;
     }
     let self =this;
-    axios.get('http://localhost:8080/ezScrum/products/' + this.props.location.state.selectedProduct.productId + '/backlog_items')
+    axios.get(Config.back_end_host + Config.ezScrum_api + '/products/' + this.props.location.state.selectedProduct.productId + '/backlog_items')
     .then(function (response) {
       let backlogItemList = response.data.backlogItemList;
       for(var i=0; i<backlogItemList.length; i++){
@@ -48,7 +49,7 @@ class BacklogItem extends React.Component {
           let selectedBacklogItemList = backlogItemList.filter(function(backlogItem){
             return backlogItem.backlogItemId === selectedBacklogItem.backlogItemId;
           });
-          if(selectedBacklogItemList === []){
+          if(selectedBacklogItemList.length === 0){
             self.setState({selectedBacklogItem : undefined});
           }else{
             self.setState({selectedBacklogItem : selectedBacklogItemList[0]});
@@ -58,6 +59,7 @@ class BacklogItem extends React.Component {
     })
     .catch(function (error){
         console.log(error);
+        window.location.href = Config.front_end_host;
     });
   }
 
@@ -71,7 +73,7 @@ class BacklogItem extends React.Component {
 
   render() {
     if(this.props.location.state === undefined){
-      return <Redirect to={"/"}/>
+      return <Redirect to={"/"}/>;
     }
     return (
       <div className="SideBar_Div_All">

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Button, Modal } from 'react-bootstrap';
+import Config from '../config.js';
 
 // Import React Table
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
@@ -36,13 +37,14 @@ class ViewTaskHistory extends React.Component{
 
     getTaskHistories(){
         let self =this;
-        axios.get('http://localhost:8080/ezScrum/tasks/' + this.props.task.taskId + '/histories')
+        axios.get(Config.back_end_host + Config.ezScrum_api + '/tasks/' + this.props.task.taskId + '/histories')
         .then(function (response) {
             let taskHistoryList = response.data.taskHistoryList;
             self.setState({taskHistoryList : taskHistoryList});
         })
         .catch(function (error){
             console.log(error);
+            window.location.href = Config.front_end_host;
         });
     }
 
