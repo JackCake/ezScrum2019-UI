@@ -25,6 +25,10 @@ class EditTag extends React.Component{
             alert('The name is required.');
             return;
         }
+        if(this.props.tagData === undefined){
+            alert('Sorry, there is the problem when edit the tag. Please refresh the page and try again.');
+            return;
+        }
         let tagId = this.props.row.tagId;
         if(this.props.tagData.some(tag => tag.tagId !== tagId && tag.name === this.state.name)){
             alert('There is the same name of the tag.');

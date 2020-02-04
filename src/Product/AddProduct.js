@@ -38,6 +38,10 @@ class AddProduct extends React.Component{
             alert('The name is required.');
             return;
         }
+        if(this.props.productData === undefined){
+            alert('Sorry, there is the problem when add the product. Please refresh the page and try again.');
+            return;
+        }
         if(this.props.productData.some(product => product.name === this.state.name)){
             alert('There is the same name of the product.');
             return;

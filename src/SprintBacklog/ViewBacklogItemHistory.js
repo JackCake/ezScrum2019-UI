@@ -65,7 +65,7 @@ class ViewBacklogItemHistory extends React.Component{
 
                             <TableHeaderColumn 
                                 dataField="occurredOn"
-                                width="30%"
+                                width="25%"
                                 dataSort={false}
                                 columnTitle
                             >
@@ -74,7 +74,7 @@ class ViewBacklogItemHistory extends React.Component{
 
                             <TableHeaderColumn 
                                 dataField="behavior"
-                                width="20%"
+                                width="25%"
                                 dataSort={false}
                                 columnTitle
                             >

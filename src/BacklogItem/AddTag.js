@@ -24,6 +24,10 @@ class AddTag extends React.Component{
             alert('The name is required.');
             return;
         }
+        if(this.props.tagData === undefined){
+            alert('Sorry, there is the problem when add the tag. Please refresh the page and try again.');
+            return;
+        }
         if(this.props.tagData.some(tag => tag.name === this.state.name)){
             alert('There is the same name of the tag.');
             return;

@@ -47,6 +47,10 @@ class EditProduct extends React.Component{
             alert('The name is required.');
             return;
         }
+        if(this.props.productData === undefined){
+            alert('Sorry, there is the problem when edit the product. Please refresh the page and try again.');
+            return;
+        }
         if(this.props.productData.some(product => product.productId !== this.state.productId && product.name === this.state.name)){
             alert('There is the same name of the product.');
             return;
